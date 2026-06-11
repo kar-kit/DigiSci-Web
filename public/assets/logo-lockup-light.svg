@@ -1,0 +1,10 @@
+<svg width="232" height="48" viewBox="0 0 232 48" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="DigiSci">
+
+  <rect x="1" y="3" width="42" height="42" stroke="#0A1628" stroke-width="1.5"></rect>
+  <path d="M1 17H7 M1 31H7 M37 17H43 M37 31H43 M15 3V9 M29 3V9 M15 39V45 M29 39V45" stroke="#0A1628" stroke-opacity="0.25" stroke-width="1.5"></path>
+  <path d="M12 34L32 14" stroke="#00A3E0" stroke-width="2"></path>
+  <rect x="8" y="30" width="8" height="8" fill="#F9FAFB" stroke="#0A1628" stroke-width="2"></rect>
+  <rect x="28" y="10" width="8" height="8" fill="#00A3E0"></rect>
+
+  <text x="60" y="32" font-family="'IBM Plex Sans', system-ui, sans-serif" font-size="26" font-weight="600" letter-spacing="-0.5" fill="#0A1628">DigiSci</text>
+</svg>
