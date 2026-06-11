@@ -1,49 +1,299 @@
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap');
+
+/* Register design tokens as Tailwind CSS variables */
+@theme {
+  --font-sans: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Source Serif 4', Georgia, serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', monospace;
+
+  --color-navy-950: #06101C;
+  --color-navy-900: #0A1628;
+  --color-navy-850: #0D1B30;
+  --color-navy-800: #112139;
+  --color-navy-700: #182943;
+  --color-navy-600: #233653;
+  --color-navy-500: #324867;
+  --color-navy-400: #4A6285;
+
+  --color-blue-700: #006A93;
+  --color-blue-600: #0086B8;
+  --color-blue-500: #00A3E0;
+  --color-blue-400: #33B7E7;
+  --color-blue-300: #6FCBEF;
+  --color-blue-200: #ADE0F6;
+  --color-blue-glow: rgba(0, 163, 224, 0.16);
+
+  --color-neutral-0:   #FFFFFF;
+  --color-neutral-50:  #F9FAFB;
+  --color-neutral-100: #F1F3F6;
+  --color-neutral-200: #E2E7ED;
+  --color-neutral-300: #C9D1DA;
+  --color-neutral-400: #9BA6B4;
+  --color-neutral-500: #6C7888;
+  --color-neutral-600: #4C5868;
+  --color-neutral-700: #33404F;
+
+  --color-green-600: #2F7A5E;
+  --color-green-500: #3E9576;
+  --color-green-400: #5FAE90;
+  --color-green-glow: rgba(62, 149, 118, 0.14);
+
+  --color-amber-500: #D99A2B;
+  --color-red-500:   #D9534F;
+
+  /* Semantic aliases */
+  --color-surface-base:    var(--color-navy-900);
+  --color-surface-sunken:  var(--color-navy-950);
+  --color-surface-raised:  var(--color-navy-850);
+  --color-surface-overlay: var(--color-navy-800);
+  --color-surface-inverse: var(--color-neutral-50);
+
+  --color-text-primary:   var(--color-neutral-50);
+  --color-text-secondary: var(--color-neutral-400);
+  --color-text-tertiary:  var(--color-neutral-500);
+  --color-text-inverse:   var(--color-navy-900);
+  --color-text-accent:    var(--color-blue-400);
+
+  --color-border-subtle:  rgba(255, 255, 255, 0.07);
+  --color-border-default: rgba(255, 255, 255, 0.12);
+  --color-border-strong:  rgba(255, 255, 255, 0.22);
+  --color-border-accent:  var(--color-blue-500);
+
+  --color-accent:        var(--color-blue-500);
+  --color-accent-hover:  var(--color-blue-400);
+  --color-accent-press:  var(--color-blue-600);
+  --color-accent-text:   var(--color-navy-950);
+  --color-accent-muted:  var(--color-blue-glow);
+
+  --color-sector:        var(--color-green-500);
+  --color-sector-muted:  var(--color-green-glow);
+
+  --color-grid-line:   rgba(255, 255, 255, 0.05);
+  --color-grid-line-2: rgba(0, 163, 224, 0.10);
+
+  /* Spacing */
+  --spacing-px: 1px;
+
+  /* Shadows */
+  --shadow-md: 0 8px 24px -12px rgba(0,0,0,0.6);
+  --shadow-lg: 0 24px 60px -24px rgba(0,0,0,0.7);
+  --shadow-accent: 0 0 0 1px var(--color-blue-500), 0 0 24px -6px var(--color-blue-glow);
+
+  /* Easing */
+  --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ==========================================================================
+   DigiSci — CSS token aliases (used in arbitrary Tailwind values)
+   ========================================================================== */
+
+:root {
+  /* Navy spine */
+  --navy-950: #06101C;
+  --navy-900: #0A1628;
+  --navy-850: #0D1B30;
+  --navy-800: #112139;
+  --navy-700: #182943;
+  --navy-600: #233653;
+  --navy-500: #324867;
+  --navy-400: #4A6285;
+
+  /* Precise blue accent */
+  --blue-700: #006A93;
+  --blue-600: #0086B8;
+  --blue-500: #00A3E0;
+  --blue-400: #33B7E7;
+  --blue-300: #6FCBEF;
+  --blue-200: #ADE0F6;
+  --blue-glow: rgba(0, 163, 224, 0.16);
+
+  /* Neutral ramp */
+  --neutral-0:   #FFFFFF;
+  --neutral-50:  #F9FAFB;
+  --neutral-100: #F1F3F6;
+  --neutral-200: #E2E7ED;
+  --neutral-300: #C9D1DA;
+  --neutral-400: #9BA6B4;
+  --neutral-500: #6C7888;
+  --neutral-600: #4C5868;
+  --neutral-700: #33404F;
+
+  /* Sector green — sparingly for domain tags */
+  --green-600: #2F7A5E;
+  --green-500: #3E9576;
+  --green-400: #5FAE90;
+  --green-glow: rgba(62, 149, 118, 0.14);
+
+  /* Signal — status only */
+  --amber-500: #D99A2B;
+  --red-500:   #D9534F;
+
+  /* Semantic surfaces — dark default */
+  --surface-base:    var(--navy-900);
+  --surface-sunken:  var(--navy-950);
+  --surface-raised:  var(--navy-850);
+  --surface-overlay: var(--navy-800);
+  --surface-inverse: var(--neutral-50);
+
+  /* Text */
+  --text-primary:   var(--neutral-50);
+  --text-secondary: var(--neutral-400);
+  --text-tertiary:  var(--neutral-500);
+  --text-inverse:   var(--navy-900);
+  --text-accent:    var(--blue-400);
+
+  /* Borders */
+  --border-subtle:  rgba(255, 255, 255, 0.07);
+  --border-default: rgba(255, 255, 255, 0.12);
+  --border-strong:  rgba(255, 255, 255, 0.22);
+  --border-accent:  var(--blue-500);
+
+  /* Accent interactive */
+  --accent:        var(--blue-500);
+  --accent-hover:  var(--blue-400);
+  --accent-press:  var(--blue-600);
+  --accent-text:   var(--navy-950);
+  --accent-muted:  var(--blue-glow);
+
+  --sector:       var(--green-500);
+  --sector-muted: var(--green-glow);
+
+  --grid-line:   rgba(255, 255, 255, 0.05);
+  --grid-line-2: rgba(0, 163, 224, 0.10);
+  --focus-ring:  var(--blue-500);
+
+  /* Typography */
+  --font-sans:    'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+  --font-serif:   'Source Serif 4', Georgia, serif;
+  --font-mono:    'IBM Plex Mono', ui-monospace, 'SF Mono', monospace;
+  --font-display: var(--font-sans);
+  --font-body:    var(--font-serif);
+  --font-ui:      var(--font-sans);
+  --font-label:   var(--font-mono);
+
+  --text-2xs:  0.6875rem;
+  --text-xs:   0.75rem;
+  --text-sm:   0.875rem;
+  --text-base: 1rem;
+  --text-md:   1.125rem;
+  --text-lg:   1.375rem;
+  --text-xl:   1.75rem;
+  --text-2xl:  2.25rem;
+  --text-3xl:  3rem;
+  --text-4xl:  4rem;
+  --text-5xl:  5.25rem;
+  --text-6xl:  7rem;
+
+  --weight-regular:  400;
+  --weight-medium:   500;
+  --weight-semibold: 600;
+  --weight-bold:     700;
+
+  --leading-none:    1;
+  --leading-tight:   1.08;
+  --leading-snug:    1.2;
+  --leading-normal:  1.45;
+  --leading-relaxed: 1.65;
+
+  --tracking-tight:  -0.02em;
+  --tracking-snug:   -0.01em;
+  --tracking-normal: 0;
+  --tracking-wide:   0.04em;
+  --tracking-label:  0.14em;
+
+  /* Spacing (4px grid) */
+  --space-1:  0.25rem;
+  --space-2:  0.5rem;
+  --space-3:  0.75rem;
+  --space-4:  1rem;
+  --space-5:  1.5rem;
+  --space-6:  2rem;
+  --space-7:  2.5rem;
+  --space-8:  3rem;
+  --space-9:  4rem;
+  --space-10: 5rem;
+  --space-11: 6rem;
+  --space-12: 8rem;
+
+  --container-max:   1240px;
+  --container-prose: 680px;
+  --gutter: clamp(1.25rem, 4vw, 4rem);
+
+  --radius-0:    0;
+  --radius-xs:   2px;
+  --radius-sm:   4px;
+  --radius-md:   6px;
+  --radius-pill: 999px;
+
+  --z-base:    0;
+  --z-raised:  10;
+  --z-sticky:  100;
+  --z-overlay: 1000;
+
+  --ease-out:    cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0.05, 0.36, 1);
+  --dur-fast:    120ms;
+  --dur-base:    180ms;
+  --dur-slow:    280ms;
+
+  /* Effects */
+  --shadow-none: none;
+  --shadow-sm:   0 1px 0 0 rgba(0, 0, 0, 0.4);
+  --shadow-md:   0 8px 24px -12px rgba(0, 0, 0, 0.6);
+  --shadow-lg:   0 24px 60px -24px rgba(0, 0, 0, 0.7);
+  --shadow-accent: 0 0 0 1px var(--blue-500), 0 0 24px -6px var(--blue-glow);
+  --ring: 0 0 0 2px var(--surface-base), 0 0 0 4px var(--focus-ring);
+
+  --grid-bg:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  --grid-bg-size: 48px 48px;
+  --rule-accent: linear-gradient(90deg, var(--blue-500), transparent 60%);
 }
+
+[data-theme="light"] {
+  --surface-base:    var(--neutral-50);
+  --surface-sunken:  var(--neutral-100);
+  --surface-raised:  var(--neutral-0);
+  --surface-overlay: var(--neutral-0);
+  --surface-inverse: var(--navy-900);
+  --text-primary:   var(--navy-900);
+  --text-secondary: var(--neutral-600);
+  --text-tertiary:  var(--neutral-500);
+  --text-inverse:   var(--neutral-50);
+  --text-accent:    var(--blue-600);
+  --border-subtle:  rgba(10, 22, 40, 0.08);
+  --border-default: rgba(10, 22, 40, 0.14);
+  --border-strong:  rgba(10, 22, 40, 0.26);
+  --accent-text:    var(--neutral-50);
+  --grid-line:      rgba(10, 22, 40, 0.05);
+  --grid-line-2:    rgba(0, 163, 224, 0.12);
+}
+
+/* ---- Reset ---- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html {
-  height: 100%;
-}
-
-html,
-body {
-  max-width: 100vw;
+  background: var(--navy-900);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
-body {
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+body { background: var(--surface-base); }
+
+a { color: inherit; text-decoration: none; }
+img, svg { display: block; max-width: 100%; }
+button { cursor: pointer; font: inherit; }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-snug);
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-}
+.lucide { stroke-width: 1.75; }
