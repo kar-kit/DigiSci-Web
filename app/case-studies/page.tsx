@@ -6,6 +6,12 @@ import { Eyebrow } from '@/components/ui/Eyebrow';
 export const metadata: Metadata = {
   title: 'Case Studies | DigiSci AI Biotech Consulting',
   description: 'Real outcomes from AI strategy and digital transformation in CGT manufacturing, pharmaceutical quality systems, and operational data architecture.',
+  openGraph: {
+    type: 'website',
+    url: '/case-studies',
+    title: 'Case Studies | DigiSci AI Biotech Consulting',
+    description: 'Real outcomes from AI strategy and digital transformation in CGT manufacturing, pharmaceutical quality systems, and operational data architecture.',
+  },
 };
 import { Tag } from '@/components/ui/Tag';
 

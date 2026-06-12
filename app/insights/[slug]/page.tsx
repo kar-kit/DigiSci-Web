@@ -346,9 +346,16 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const { slug } = await params;
   const article = ARTICLES.find((a) => a.slug === slug);
   if (!article) return {};
+  const title = `${article.title} | DigiSci Insights`;
   return {
-    title: `${article.title} | DigiSci Insights`,
+    title,
     description: article.excerpt,
+    openGraph: {
+      type: 'article',
+      url: `/insights/${slug}`,
+      title,
+      description: article.excerpt,
+    },
   };
 }
 
