@@ -6,6 +6,12 @@ import { Eyebrow } from '@/components/ui/Eyebrow';
 export const metadata: Metadata = {
   title: 'Industry Expertise | CGT & Pharma AI | DigiSci',
   description: 'Deep sector knowledge across cell and gene therapy, pharmaceutical manufacturing, and AI in regulated environments. Built from operational experience.',
+  openGraph: {
+    type: 'website',
+    url: '/industry',
+    title: 'Industry Expertise | CGT & Pharma AI | DigiSci',
+    description: 'Deep sector knowledge across cell and gene therapy, pharmaceutical manufacturing, and AI in regulated environments. Built from operational experience.',
+  },
 };
 import { Tag } from '@/components/ui/Tag';
 

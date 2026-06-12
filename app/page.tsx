@@ -5,6 +5,12 @@ import { ArrowRight, ArrowUpRight, Calendar, Route, Cpu, Database, TrendingUp, L
 export const metadata: Metadata = {
   title: 'DigiSci — AI for Biotech & Pharma Operations',
   description: 'Senior-led AI strategy, digital quality systems, and manufacturing transformation for biotech and pharmaceutical operations leaders.',
+  openGraph: {
+    type: 'website',
+    url: '/',
+    title: 'DigiSci — AI for Biotech & Pharma Operations',
+    description: 'Senior-led AI strategy, digital quality systems, and manufacturing transformation for biotech and pharmaceutical operations leaders.',
+  },
 };
 import { Button } from '@/components/ui/Button';
 import { Tag } from '@/components/ui/Tag';
