@@ -36,8 +36,13 @@ describe('DGS-A1-03 — Mobile hamburger', () => {
     assert.ok(src.includes('aria-expanded'), 'aria-expanded missing on hamburger');
   });
 
-  test('hamburger has aria-controls pointing to mobile menu', () => {
-    assert.ok(src.includes('aria-controls') && src.includes('mobile-menu'), 'aria-controls missing');
+  test('hamburger has aria-controls pointing to mobile overlay', () => {
+    // id updated from mobile-menu → mobile-nav-overlay in DGS-A2-01 (full-screen overlay refactor)
+    assert.ok(
+      src.includes('aria-controls') &&
+        (src.includes('mobile-nav-overlay') || src.includes('mobile-menu')),
+      'aria-controls missing',
+    );
   });
 
   test('hamburger hidden on md+ (md:hidden)', () => {
@@ -48,8 +53,12 @@ describe('DGS-A1-03 — Mobile hamburger', () => {
     assert.ok(src.includes('hidden md:flex'), 'desktop nav not hidden on mobile');
   });
 
-  test('mobile drawer id matches aria-controls', () => {
-    assert.ok(src.includes('id="mobile-menu"'), 'mobile-menu id missing');
+  test('mobile overlay id matches aria-controls', () => {
+    // id updated from mobile-menu → mobile-nav-overlay in DGS-A2-01 (full-screen overlay refactor)
+    assert.ok(
+      src.includes('id="mobile-nav-overlay"') || src.includes('id="mobile-menu"'),
+      'mobile overlay id missing',
+    );
   });
 
   test('mobile drawer has aria-hidden', () => {
