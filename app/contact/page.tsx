@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Calendar, Globe, Mail, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Eyebrow } from '@/components/ui/Eyebrow';
+import { trackEvent } from '@/lib/gtag';
 
 function LinkedinIcon({ size = 18 }: { size?: number }) {
   return (
@@ -43,6 +44,7 @@ export default function ContactPage() {
 
   function handleFormSubmit(e: React.FormEvent) {
     e.preventDefault();
+    trackEvent('contact_form_submit');
     setFormSubmitted(true);
   }
 
@@ -147,6 +149,7 @@ export default function ContactPage() {
                     href="https://calendly.com/digisci"
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() => trackEvent('discovery_call_click', { selected_slot: selectedSlot ?? 'none' })}
                     aria-disabled={!selectedSlot}
                     className={[
                       'inline-flex items-center gap-2 px-5 py-2.5 font-sans text-sm font-medium border transition-colors duration-[120ms]',
