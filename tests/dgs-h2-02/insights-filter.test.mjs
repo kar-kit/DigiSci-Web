@@ -12,39 +12,47 @@ import { fileURLToPath } from 'node:url';
 const __dir = dirname(fileURLToPath(import.meta.url));
 const ROOT  = join(__dir, '..', '..');
 const src   = readFileSync(join(ROOT, 'app/insights/page.tsx'), 'utf8');
+// Interactive filter logic was extracted into a client component
+const clientSrc = (() => {
+  try { return readFileSync(join(ROOT, 'app/insights/InsightsClient.tsx'), 'utf8'); } catch { return src; }
+})();
 
 describe('DGS-H2-02 — Client-side interactivity', () => {
   test('page is a client component', () => {
-    assert.ok(src.startsWith("'use client'") || src.startsWith('"use client"'), 'Missing "use client" directive');
+    assert.ok(
+      src.startsWith("'use client'") || src.startsWith('"use client"') ||
+      clientSrc.startsWith("'use client'") || clientSrc.startsWith('"use client"'),
+      'Missing "use client" directive in page or InsightsClient',
+    );
   });
 
   test('useState imported for filter state', () => {
-    assert.ok(src.includes('useState'), 'useState not imported or used');
+    assert.ok(clientSrc.includes('useState'), 'useState not imported or used');
   });
 
   test('active filter state variable present', () => {
-    assert.ok(src.includes('activeFilter') || src.includes('active'), 'Active filter state variable missing');
+    assert.ok(clientSrc.includes('activeFilter') || clientSrc.includes('active'), 'Active filter state variable missing');
   });
 });
 
 describe('DGS-H2-02 — Filter logic', () => {
   test('filter function narrows articles by tag', () => {
     assert.ok(
-      src.includes("a.tag === activeFilter") || src.includes('a.tag === active'),
+      clientSrc.includes("a.tag === activeFilter") || clientSrc.includes('a.tag === active'),
       'Filter logic comparing article tag to active filter missing'
     );
   });
 
   test('filteredArticles (or equivalent) derived from active filter', () => {
     assert.ok(
-      src.includes('filteredArticles') || src.includes('filtered'),
+      clientSrc.includes('filteredArticles') || clientSrc.includes('filtered'),
       'Filtered articles derivation missing'
     );
   });
 
   test('"All" filter shows all articles', () => {
     assert.ok(
-      src.includes("=== 'All'") || src.includes('=== "All"'),
+      clientSrc.includes("=== 'All'") || clientSrc.includes('=== "All"'),
       '"All" filter special-case missing'
     );
   });
@@ -52,17 +60,17 @@ describe('DGS-H2-02 — Filter logic', () => {
 
 describe('DGS-H2-02 — Filter bar interactivity', () => {
   test('onClick handler on filter buttons', () => {
-    const block = src.slice(src.indexOf('aria-label="Filter bar"'));
+    const block = clientSrc.slice(clientSrc.indexOf('aria-label="Filter bar"'));
     assert.ok(block.includes('onClick'), 'onClick handler missing on filter buttons');
   });
 
   test('aria-pressed on filter buttons for accessibility', () => {
-    const block = src.slice(src.indexOf('aria-label="Filter bar"'));
+    const block = clientSrc.slice(clientSrc.indexOf('aria-label="Filter bar"'));
     assert.ok(block.includes('aria-pressed'), 'aria-pressed missing on filter buttons');
   });
 
   test('active filter styling applied conditionally', () => {
-    const block = src.slice(src.indexOf('aria-label="Filter bar"'));
+    const block = clientSrc.slice(clientSrc.indexOf('aria-label="Filter bar"'));
     assert.ok(
       block.includes('isActive') || block.includes('activeFilter') || block.includes('active'),
       'Conditional active styling not applied to filter buttons'
@@ -73,13 +81,13 @@ describe('DGS-H2-02 — Filter bar interactivity', () => {
 describe('DGS-H2-02 — Tag counts', () => {
   test('tag count computation present (tagCounts or equivalent)', () => {
     assert.ok(
-      src.includes('tagCounts') || src.includes('counts'),
+      clientSrc.includes('tagCounts') || clientSrc.includes('counts'),
       'Tag count computation missing'
     );
   });
 
   test('counts displayed per filter button', () => {
-    const block = src.slice(src.indexOf('aria-label="Filter bar"'));
+    const block = clientSrc.slice(clientSrc.indexOf('aria-label="Filter bar"'));
     assert.ok(
       block.includes('tagCounts') || block.includes('counts['),
       'Tag counts not rendered per filter button'
@@ -87,7 +95,7 @@ describe('DGS-H2-02 — Tag counts', () => {
   });
 
   test('dynamic article count shown (not hardcoded "9 articles")', () => {
-    const block = src.slice(src.indexOf('aria-label="Filter bar"'));
+    const block = clientSrc.slice(clientSrc.indexOf('aria-label="Filter bar"'));
     assert.ok(
       block.includes('filteredArticles.length') || block.includes('filtered.length'),
       'Dynamic filtered article count not shown'
@@ -98,7 +106,7 @@ describe('DGS-H2-02 — Tag counts', () => {
 
 describe('DGS-H2-02 — Article grid uses filtered articles', () => {
   test('article grid renders filteredArticles, not raw ARTICLES', () => {
-    const gridBlock = src.slice(src.indexOf('aria-label="Article grid"'));
+    const gridBlock = clientSrc.slice(clientSrc.indexOf('aria-label="Article grid"'));
     assert.ok(
       gridBlock.includes('filteredArticles.map') || gridBlock.includes('filtered.map'),
       'Article grid must render filtered articles, not raw ARTICLES'
@@ -108,7 +116,7 @@ describe('DGS-H2-02 — Article grid uses filtered articles', () => {
 
 describe('DGS-H2-02 — No raw CSS', () => {
   test('no hardcoded hex colours', () => {
-    const hexCount = (src.match(/#[0-9A-Fa-f]{3,6}\b/g) || []).length;
+    const hexCount = (clientSrc.match(/#[0-9A-Fa-f]{3,6}\b/g) || []).length;
     assert.equal(hexCount, 0, `${hexCount} hardcoded hex colours found`);
   });
 });

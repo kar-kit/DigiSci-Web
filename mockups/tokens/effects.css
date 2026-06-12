@@ -1,0 +1,40 @@
+/* ==========================================================================
+   DigiSci — Effects: shadows, overlays, textures
+   The brief forbids soft startup shadows. Elevation is communicated with
+   HAIRLINE BORDERS and faint accent glows, not blur. Shadows here are crisp,
+   low-spread, and dark — barely-there depth, never a halo.
+   ========================================================================== */
+
+:root {
+  /* ---- Shadows (used rarely; borders do most of the work) ---- */
+  --shadow-none: none;
+  --shadow-sm:   0 1px 0 0 rgba(0, 0, 0, 0.4);
+  --shadow-md:   0 8px 24px -12px rgba(0, 0, 0, 0.6);
+  --shadow-lg:   0 24px 60px -24px rgba(0, 0, 0, 0.7);
+  /* Accent glow — for focused/active states only, very restrained */
+  --shadow-accent: 0 0 0 1px var(--blue-500), 0 0 24px -6px var(--blue-glow);
+
+  /* ---- Focus ring ---- */
+  --ring: 0 0 0 2px var(--surface-base), 0 0 0 4px var(--focus-ring);
+
+  /* ---- Grid / data-viz overlay (subtle background texture) ----
+     Apply as a background on dark sections to get the engineered,
+     blueprint-grid feel. Pair --grid-bg with --grid-bg-size. */
+  --grid-bg:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px); /* @kind other */
+  --grid-bg-size: 48px 48px; /* @kind other */
+
+  /* Fine engineering grid (denser) */
+  --grid-bg-fine:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px); /* @kind other */
+  --grid-bg-fine-size: 16px 16px; /* @kind other */
+
+  /* Dot matrix — alternative data texture */
+  --dot-bg: radial-gradient(var(--grid-line) 1px, transparent 1px); /* @kind other */
+  --dot-bg-size: 24px 24px; /* @kind other */
+
+  /* Top-edge accent hairline (section dividers) */
+  --rule-accent: linear-gradient(90deg, var(--blue-500), transparent 60%); /* @kind other */
+}

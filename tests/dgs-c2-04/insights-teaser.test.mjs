@@ -35,14 +35,15 @@ describe('DGS-C2-04 — Section structure', () => {
 });
 
 describe('DGS-C2-04 — INSIGHTS data (3 articles)', () => {
-  test('INSIGHTS constant declared with 3 entries', () => {
-    assert.ok(src.includes('INSIGHTS'), 'INSIGHTS constant missing');
-    // 3 objects: count opening braces in the INSIGHTS block
-    const insightsIdx = src.indexOf('const INSIGHTS');
-    const blockEnd    = src.indexOf('] as const', insightsIdx);
+  test('INSIGHTS fallback declared with 3 entries', () => {
+    const key = src.includes('FALLBACK_INSIGHTS') ? 'FALLBACK_INSIGHTS' : 'INSIGHTS';
+    assert.ok(src.includes(key), `${key} constant missing`);
+    const constKey = src.includes('const FALLBACK_INSIGHTS') ? 'const FALLBACK_INSIGHTS' : 'const INSIGHTS';
+    const insightsIdx = src.indexOf(constKey);
+    const blockEnd    = src.indexOf('];', insightsIdx);
     const block       = src.slice(insightsIdx, blockEnd);
     const entries     = (block.match(/\{/g) || []).length;
-    assert.ok(entries >= 3, `Expected 3+ entries in INSIGHTS, found ${entries}`);
+    assert.ok(entries >= 3, `Expected 3+ entries in insights fallback, found ${entries}`);
   });
 
   test('all article titles present', () => {
@@ -52,8 +53,14 @@ describe('DGS-C2-04 — INSIGHTS data (3 articles)', () => {
   });
 
   test('article dates present', () => {
-    assert.ok(src.includes('May 2026'), 'May 2026 date missing');
-    assert.ok(src.includes('Apr 2026'), 'Apr 2026 date missing');
+    assert.ok(
+      src.includes('May 2026') || src.includes('2026-05-01'),
+      'May 2026 date missing (as string or ISO)',
+    );
+    assert.ok(
+      src.includes('Apr 2026') || src.includes('2026-04-01'),
+      'Apr 2026 date missing (as string or ISO)',
+    );
   });
 
   test('article sector tags present', () => {
@@ -70,28 +77,34 @@ describe('DGS-C2-04 — INSIGHTS data (3 articles)', () => {
 });
 
 describe('DGS-C2-04 — Article card markup', () => {
+  const mapKey = src.includes('displayInsights.map') ? 'displayInsights.map'
+    : src.includes('FALLBACK_INSIGHTS.map') ? 'FALLBACK_INSIGHTS.map' : 'INSIGHTS.map';
+
   test('articles are links (a/Link elements)', () => {
-    const insightsBlock = src.slice(src.indexOf('INSIGHTS.map'));
+    const insightsBlock = src.slice(src.indexOf(mapKey));
     assert.ok(insightsBlock.includes('<Link') || insightsBlock.includes('<a'), 'Article cards must be link elements');
   });
 
   test('article links to /insights', () => {
-    const insightsBlock = src.slice(src.indexOf('INSIGHTS.map'));
-    assert.ok(insightsBlock.includes('href="/insights"'), 'Article link to /insights missing');
+    const insightsBlock = src.slice(src.indexOf(mapKey));
+    assert.ok(
+      insightsBlock.includes('href="/insights') || insightsBlock.includes("href='/insights"),
+      'Article link to /insights missing',
+    );
   });
 
   test('Tag component used for sector label', () => {
-    const insightsBlock = src.slice(src.indexOf('INSIGHTS.map'));
+    const insightsBlock = src.slice(src.indexOf(mapKey));
     assert.ok(insightsBlock.includes('<Tag'), 'Tag component missing from article cards');
   });
 
   test('hover state on article card', () => {
-    const insightsBlock = src.slice(src.indexOf('INSIGHTS.map'));
+    const insightsBlock = src.slice(src.indexOf(mapKey));
     assert.ok(insightsBlock.includes('hover:'), 'Hover state missing from article cards');
   });
 
   test('transition/animation on card', () => {
-    const insightsBlock = src.slice(src.indexOf('INSIGHTS.map'));
+    const insightsBlock = src.slice(src.indexOf(mapKey));
     assert.ok(insightsBlock.includes('transition'), 'Transition missing from article cards');
   });
 });

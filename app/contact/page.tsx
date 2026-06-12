@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Calendar, Globe, Mail, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Eyebrow } from '@/components/ui/Eyebrow';
-import { trackEvent } from '@/lib/gtag';
+import { trackEvent } from '@/lib/umami';
 
 function LinkedinIcon({ size = 18 }: { size?: number }) {
   return (
@@ -36,16 +36,35 @@ const ENQUIRY_TYPES = [
 export default function ContactPage() {
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   function handleSlotClick(dayLabel: string, slot: string) {
     const key = `${dayLabel} ${slot}`;
     setSelectedSlot((prev) => (prev === key ? null : key));
   }
 
-  function handleFormSubmit(e: React.FormEvent) {
+  async function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    trackEvent('contact_form_submit');
-    setFormSubmitted(true);
+    setFormError(null);
+    const fd = new FormData(e.currentTarget);
+    const res = await fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: fd.get('name'),
+        organisation: fd.get('organisation'),
+        role: fd.get('role'),
+        email: fd.get('email'),
+        enquiryType: fd.get('enquiryType'),
+        description: fd.get('description'),
+      }),
+    });
+    if (res.ok) {
+      trackEvent('contact_form_submit');
+      setFormSubmitted(true);
+    } else {
+      setFormError('Something went wrong — please email us directly.');
+    }
   }
 
   return (
@@ -201,6 +220,7 @@ export default function ContactPage() {
                       </label>
                       <input
                         id="contact-name"
+                        name="name"
                         type="text"
                         placeholder="Dr. Jordan Avila"
                         required
@@ -213,6 +233,7 @@ export default function ContactPage() {
                       </label>
                       <input
                         id="contact-org"
+                        name="organisation"
                         type="text"
                         placeholder="Helix Biotherapeutics"
                         className="bg-[var(--surface-base)] border border-[var(--border-default)] px-4 py-3 font-sans text-sm text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] focus:outline-none focus:border-[var(--accent)] transition-colors duration-[120ms]"
@@ -227,6 +248,7 @@ export default function ContactPage() {
                       </label>
                       <input
                         id="contact-role"
+                        name="role"
                         type="text"
                         placeholder="VP, Manufacturing"
                         className="bg-[var(--surface-base)] border border-[var(--border-default)] px-4 py-3 font-sans text-sm text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] focus:outline-none focus:border-[var(--accent)] transition-colors duration-[120ms]"
@@ -238,6 +260,7 @@ export default function ContactPage() {
                       </label>
                       <input
                         id="contact-email"
+                        name="email"
                         type="email"
                         placeholder="name@company.com"
                         required
@@ -252,6 +275,7 @@ export default function ContactPage() {
                     </label>
                     <select
                       id="contact-type"
+                      name="enquiryType"
                       className="bg-[var(--surface-base)] border border-[var(--border-default)] px-4 py-3 font-sans text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent)] transition-colors duration-[120ms] appearance-none"
                     >
                       <option value="" disabled>Select a type…</option>
@@ -267,12 +291,16 @@ export default function ContactPage() {
                     </label>
                     <textarea
                       id="contact-message"
+                      name="description"
                       rows={5}
                       placeholder="The operational challenge you're working through…"
                       className="bg-[var(--surface-base)] border border-[var(--border-default)] px-4 py-3 font-sans text-sm text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] focus:outline-none focus:border-[var(--accent)] transition-colors duration-[120ms] resize-y"
                     />
                   </div>
 
+                  {formError && (
+                    <p aria-live="polite" className="font-sans text-sm text-[var(--color-red-500)]">{formError}</p>
+                  )}
                   <Button variant="primary" as="button" type="submit" iconRight={<ArrowRight size={16} />}>
                     Send Enquiry
                   </Button>

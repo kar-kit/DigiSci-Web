@@ -65,8 +65,9 @@ describe('DGS-D1-03 — HOW_WE_WORK data rows', () => {
   });
 
   test('three detail rows (Delivery, Roster, Geography)', () => {
-    const idx   = src.indexOf('const HOW_WE_WORK');
-    const end   = src.indexOf('] as const', idx);
+    const constKey = src.includes('const FALLBACK_HOW_WE_WORK') ? 'const FALLBACK_HOW_WE_WORK' : 'const HOW_WE_WORK';
+    const idx   = src.indexOf(constKey);
+    const end   = src.indexOf('];', idx);
     const block = src.slice(idx, end);
     const count = (block.match(/label:/g) || []).length;
     assert.equal(count, 3, `Expected 3 label entries in HOW_WE_WORK, found ${count}`);

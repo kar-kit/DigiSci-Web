@@ -21,7 +21,7 @@ describe('DGS-E1-01 — Page exists', () => {
   });
 
   test('page exports a default React component', () => {
-    assert.ok(src.includes('export default function'), 'No default export function found');
+    assert.ok(src.includes('export default function') || src.includes('export default async function'), 'No default export function found');
   });
 });
 
@@ -58,8 +58,9 @@ describe('DGS-E1-01 — Service lines section', () => {
 
   test('SERVICES constant declared with 4 entries', () => {
     assert.ok(src.includes('SERVICES'), 'SERVICES constant missing');
-    const idx   = src.indexOf('const SERVICES');
-    const end   = src.indexOf('] as const', idx);
+    const constKey = src.includes('const FALLBACK_SERVICES') ? 'const FALLBACK_SERVICES' : 'const SERVICES';
+    const idx   = src.indexOf(constKey);
+    const end   = src.indexOf('];', idx);
     const block = src.slice(idx, end);
     const count = (block.match(/title:/g) || []).length;
     assert.equal(count, 4, `Expected 4 title entries in SERVICES, found ${count}`);

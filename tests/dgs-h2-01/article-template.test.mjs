@@ -39,8 +39,10 @@ describe('DGS-H2-01 — Static params and notFound', () => {
   });
 
   test('all 10 article slugs present in ARTICLES', () => {
-    const idx   = src.indexOf('const ARTICLES');
-    const end   = src.indexOf('] as const', idx);
+    const constKey = src.includes('const HARDCODED_ARTICLES') ? 'const HARDCODED_ARTICLES'
+      : src.includes('const FALLBACK_ARTICLES') ? 'const FALLBACK_ARTICLES' : 'const ARTICLES';
+    const idx   = src.indexOf(constKey);
+    const end   = src.indexOf('];', idx);
     const block = src.slice(idx, end);
     const count = (block.match(/slug:/g) || []).length;
     assert.ok(count >= 10, `Expected at least 10 article entries in ARTICLES, found ${count}`);

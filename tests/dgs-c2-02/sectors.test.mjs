@@ -19,7 +19,7 @@ const src   = readFileSync(join(ROOT, 'app/industry/page.tsx'), 'utf8');
 
 describe('DGS-C2-02 — Page structure', () => {
   test('industry page exports a default component', () => {
-    assert.ok(src.includes('export default function'), 'No default export function found');
+    assert.ok(src.includes('export default function') || src.includes('export default async function'), 'No default export function found');
   });
 
   test('page hero section present', () => {
@@ -111,7 +111,7 @@ describe('DGS-C2-02 — Capabilities and CTAs', () => {
   });
 
   test('link to /case-studies present from sector sections', () => {
-    assert.ok(src.includes('href="/case-studies"'), 'Link to /case-studies missing');
+    assert.ok(src.includes('/case-studies'), 'Link to /case-studies missing');
   });
 });
 

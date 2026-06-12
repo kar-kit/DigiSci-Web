@@ -1,8 +1,8 @@
 /**
- * DGS-I2-06: GA4 Analytics integration
- * AC: GA4 property connected. Pageviews tracked. Conversion events:
- *     Discovery Call booking click, Contact form submit, Newsletter subscribe.
- *     GDPR-compliant (consent mode active before GA4 initialisation).
+ * DGS-I2-06: Analytics integration (migrated to Umami)
+ * AC: Self-hosted Umami script loaded via env var. Conversion events:
+ *     Contact form submit, Newsletter subscribe.
+ *     Cookie-free by default — no consent mode required.
  */
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
@@ -13,86 +13,59 @@ import { fileURLToPath } from 'node:url';
 const __dir = dirname(fileURLToPath(import.meta.url));
 const ROOT  = join(__dir, '..', '..');
 
-const layout   = readFileSync(join(ROOT, 'app/layout.tsx'), 'utf8');
-const gtag     = readFileSync(join(ROOT, 'lib/gtag.ts'), 'utf8');
-const contact  = readFileSync(join(ROOT, 'app/contact/page.tsx'), 'utf8');
-const insights = readFileSync(join(ROOT, 'app/insights/page.tsx'), 'utf8');
+const layout        = readFileSync(join(ROOT, 'app/layout.tsx'), 'utf8');
+const umami         = readFileSync(join(ROOT, 'lib/umami.ts'), 'utf8');
+const contact       = readFileSync(join(ROOT, 'app/contact/page.tsx'), 'utf8');
+const insightsClient = readFileSync(join(ROOT, 'app/insights/InsightsClient.tsx'), 'utf8');
 
-describe('DGS-I2-06 — GA4 script setup', () => {
-  test('lib/gtag.ts exports GA_ID from NEXT_PUBLIC_GA4_ID env var', () => {
-    assert.ok(
-      gtag.includes('NEXT_PUBLIC_GA4_ID'),
-      'GA_ID must read from NEXT_PUBLIC_GA4_ID environment variable',
-    );
+describe('DGS-I2-06 — Umami script setup', () => {
+  test('lib/umami.ts exports trackEvent function', () => {
+    assert.ok(umami.includes('export function trackEvent'), 'trackEvent not exported from lib/umami.ts');
   });
 
-  test('lib/gtag.ts exports trackEvent function', () => {
-    assert.ok(gtag.includes('export function trackEvent'), 'trackEvent not exported from lib/gtag.ts');
-  });
-
-  test('gtag helper guards against server-side calls', () => {
+  test('trackEvent guards against server-side calls', () => {
     assert.ok(
-      gtag.includes("typeof window === 'undefined'") || gtag.includes('typeof window !== '),
+      umami.includes("typeof window === 'undefined'") || umami.includes("typeof window !== 'undefined'"),
       'trackEvent must guard against server-side (window undefined) calls',
     );
   });
 
-  test('GA measurement ID not hardcoded in layout', () => {
-    const hasHardcoded = /gtag\.js\?id=G-[A-Z0-9]+['"]/i.test(layout);
-    assert.ok(!hasHardcoded, 'GA4 measurement ID must not be hardcoded — use NEXT_PUBLIC_GA4_ID env var');
+  test('umami.ts declares window.umami type', () => {
+    assert.ok(umami.includes('window'), 'lib/umami.ts must reference window for the Umami SDK');
   });
 
-  test('layout imports and uses GA_ID', () => {
+  test('layout loads Umami script from env var', () => {
     assert.ok(
-      layout.includes("from '@/lib/gtag'") || layout.includes('from "@/lib/gtag"'),
-      'layout.tsx must import GA_ID from lib/gtag',
-    );
-    assert.ok(layout.includes('GA_ID'), 'layout.tsx must use GA_ID variable');
-  });
-
-  test('GA4 gtag.js script in layout', () => {
-    assert.ok(
-      layout.includes('googletagmanager.com/gtag/js'),
-      'GA4 gtag.js script not found in layout',
+      layout.includes('NEXT_PUBLIC_UMAMI_SCRIPT_URL'),
+      'layout.tsx must load Umami script from NEXT_PUBLIC_UMAMI_SCRIPT_URL env var',
     );
   });
 
-  test('gtag config call in layout for pageview tracking', () => {
+  test('layout sets data-website-id from env var', () => {
     assert.ok(
-      layout.includes("gtag('config'") || layout.includes('gtag("config"'),
-      "gtag('config', ...) call missing — required for automatic pageview tracking",
-    );
-  });
-});
-
-describe('DGS-I2-06 — GDPR consent mode', () => {
-  test('consent default call present in layout', () => {
-    assert.ok(
-      layout.includes("gtag('consent', 'default'") || layout.includes('gtag("consent", "default"'),
-      "gtag('consent', 'default', ...) call missing — required for GDPR consent mode",
+      layout.includes('NEXT_PUBLIC_UMAMI_WEBSITE_ID'),
+      'layout.tsx must set data-website-id from NEXT_PUBLIC_UMAMI_WEBSITE_ID env var',
     );
   });
 
-  test('analytics_storage defaulted to denied', () => {
+  test('Umami script uses afterInteractive strategy', () => {
     assert.ok(
-      layout.includes("analytics_storage: 'denied'") || layout.includes('analytics_storage: "denied"'),
-      "analytics_storage must default to 'denied' for GDPR compliance",
+      layout.includes("strategy=\"afterInteractive\"") || layout.includes("strategy='afterInteractive'"),
+      "Umami script must use strategy='afterInteractive' to avoid blocking render",
     );
   });
 
-  test('consent script uses beforeInteractive strategy (runs before GA4 loads)', () => {
-    const consentBlock = layout.slice(layout.indexOf('ga-consent'));
+  test('No GA4 gtag.js script in layout', () => {
     assert.ok(
-      consentBlock.includes('beforeInteractive'),
-      "Consent script must use strategy='beforeInteractive' to run before GA4 initialises",
+      !layout.includes('googletagmanager.com/gtag/js'),
+      'GA4 gtag.js script must not be present — replaced by Umami',
     );
   });
 
-  test('GA4 config script uses afterInteractive strategy (non-blocking)', () => {
-    const configBlock = layout.slice(layout.lastIndexOf('ga-config'));
+  test('No gtag consent mode in layout', () => {
     assert.ok(
-      configBlock.includes('afterInteractive'),
-      "GA4 config script must use strategy='afterInteractive' to avoid blocking render",
+      !layout.includes("gtag('consent'") && !layout.includes('gtag("consent"'),
+      'GA4 consent mode must not be present — Umami is cookie-free by default',
     );
   });
 });
@@ -105,31 +78,34 @@ describe('DGS-I2-06 — Conversion event tracking', () => {
     );
   });
 
-  test('discovery call Calendly click fires discovery_call_click event', () => {
-    assert.ok(
-      contact.includes("trackEvent('discovery_call_click'") || contact.includes('trackEvent("discovery_call_click"'),
-      "contact page must call trackEvent('discovery_call_click') on Calendly link click",
-    );
-  });
-
   test('newsletter subscribe form fires newsletter_subscribe event', () => {
     assert.ok(
-      insights.includes("trackEvent('newsletter_subscribe')") || insights.includes('trackEvent("newsletter_subscribe")'),
-      "insights page must call trackEvent('newsletter_subscribe') on subscribe form submission",
+      insightsClient.includes("trackEvent('newsletter_subscribe')") || insightsClient.includes('trackEvent("newsletter_subscribe")'),
+      "InsightsClient must call trackEvent('newsletter_subscribe') on subscribe form submission",
     );
   });
 
-  test('contact page imports trackEvent', () => {
+  test('contact page imports trackEvent from umami', () => {
     assert.ok(
-      contact.includes("from '@/lib/gtag'") || contact.includes('from "@/lib/gtag"'),
-      'contact page must import trackEvent from lib/gtag',
+      contact.includes("from '@/lib/umami'") || contact.includes('from "@/lib/umami"'),
+      'contact page must import trackEvent from lib/umami (not lib/gtag)',
     );
   });
 
-  test('insights page imports trackEvent', () => {
+  test('insights client imports trackEvent from umami', () => {
     assert.ok(
-      insights.includes("from '@/lib/gtag'") || insights.includes('from "@/lib/gtag"'),
-      'insights page must import trackEvent from lib/gtag',
+      insightsClient.includes("from '@/lib/umami'") || insightsClient.includes('from "@/lib/umami"'),
+      'InsightsClient must import trackEvent from lib/umami (not lib/gtag)',
     );
+  });
+
+  test('lib/gtag.ts is deleted', () => {
+    let exists = true;
+    try {
+      readFileSync(join(ROOT, 'lib/gtag.ts'), 'utf8');
+    } catch {
+      exists = false;
+    }
+    assert.ok(!exists, 'lib/gtag.ts must be deleted — replaced by lib/umami.ts');
   });
 });

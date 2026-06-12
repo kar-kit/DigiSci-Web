@@ -2,6 +2,10 @@ import type { Metadata } from 'next';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Eyebrow } from '@/components/ui/Eyebrow';
+import { Tag } from '@/components/ui/Tag';
+import { sanityFetch } from '@/lib/sanity/client';
+import { allCaseStudiesCardQuery } from '@/lib/sanity/queries';
+import type { CaseStudyCard } from '@/lib/sanity/types';
 
 export const metadata: Metadata = {
   title: 'Case Studies | DigiSci AI Biotech Consulting',
@@ -13,9 +17,8 @@ export const metadata: Metadata = {
     description: 'Real outcomes from AI strategy and digital transformation in CGT manufacturing, pharmaceutical quality systems, and operational data architecture.',
   },
 };
-import { Tag } from '@/components/ui/Tag';
 
-const CASE_STUDIES = [
+const FALLBACK_CASE_STUDIES: CaseStudyCard[] = [
   {
     slug:      'ai-regulatory-documentation-platform',
     sector:    'Biopharmaceutical',
@@ -49,11 +52,14 @@ const CASE_STUDIES = [
     approach:  'DigiSci designed a Manufacturing Data Architecture Framework: data mapping across production, quality and lab systems, an integration architecture for a unified operational data layer, analytics architecture for batch analysis and KPI monitoring, and a governance framework for data integrity and audit trails.',
     impact:    'Integrated data visibility, a foundation for AI-enabled analytics, enhanced trend identification, and scalable, regulatory-aligned infrastructure.',
   },
-] as const;
+];
 
-const FILTERS = ['All work (3)', 'Cell & Gene Therapy', 'Pharma Mfg', 'Biopharmaceutical'] as const;
+const FILTERS = ['All work', 'Cell & Gene Therapy', 'Pharma Mfg', 'Biopharmaceutical'] as const;
 
-export default function CaseStudiesPage() {
+export default async function CaseStudiesPage() {
+  const caseStudies = await sanityFetch<CaseStudyCard[]>(allCaseStudiesCardQuery);
+  const CASE_STUDIES = caseStudies ?? FALLBACK_CASE_STUDIES;
+
   return (
     <main>
 
@@ -63,15 +69,10 @@ export default function CaseStudiesPage() {
         style={{ backgroundImage: 'var(--grid-bg)', backgroundSize: 'var(--grid-bg-size)' }}
         className="relative border-b border-[var(--border-subtle)] overflow-hidden"
       >
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute top-[-200px] right-[-140px] w-[560px] h-[560px] bg-[radial-gradient(circle,var(--blue-glow),transparent_62%)]"
-        />
+        <div aria-hidden="true" className="pointer-events-none absolute top-[-200px] right-[-140px] w-[560px] h-[560px] bg-[radial-gradient(circle,var(--blue-glow),transparent_62%)]" />
         <div className="relative max-w-[1240px] mx-auto px-6 md:px-10 pt-20 pb-16">
           <Eyebrow rule>Case Studies</Eyebrow>
-          <h1 className="font-sans font-semibold text-[clamp(2.25rem,3.5vw,4rem)] leading-[1.08] tracking-[-0.02em] mt-5 mb-5 max-w-[18ch]">
-            Client Work
-          </h1>
+          <h1 className="font-sans font-semibold text-[clamp(2.25rem,3.5vw,4rem)] leading-[1.08] tracking-[-0.02em] mt-5 mb-5 max-w-[18ch]">Client Work</h1>
           <p className="font-serif text-[1.125rem] leading-[1.65] text-[var(--text-secondary)] max-w-[52em]">
             A selection of engagements illustrating the scope and outcomes of DigiSci&apos;s work. Client details are anonymised in line with confidentiality commitments.
           </p>
@@ -95,7 +96,7 @@ export default function CaseStudiesPage() {
             </button>
           ))}
           <span className="ml-auto font-mono text-[0.6875rem] tracking-[0.14em] uppercase text-[var(--text-tertiary)]">
-            3 engagements
+            {CASE_STUDIES.length} engagement{CASE_STUDIES.length !== 1 ? 's' : ''}
           </span>
         </div>
       </section>
@@ -104,43 +105,27 @@ export default function CaseStudiesPage() {
       <section aria-label="Case studies" className="border-b border-[var(--border-subtle)]">
         <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-16 flex flex-col gap-8">
           {CASE_STUDIES.map(({ slug, sector, service, client, title, outcome, challenge, approach, impact }) => (
-            <article
-              key={slug}
-              aria-label={title}
-              className="bg-[var(--navy-800)] border border-[var(--border-default)] p-8 md:p-10"
-            >
+            <article key={slug} aria-label={title} className="bg-[var(--navy-800)] border border-[var(--border-default)] p-8 md:p-10">
               <div className="flex flex-wrap gap-2 mb-5">
                 <Tag variant="sector" dot>{sector}</Tag>
                 <Tag variant="accent">{service}</Tag>
               </div>
 
-              <p className="font-mono text-[0.6875rem] tracking-[0.14em] uppercase text-[var(--text-tertiary)] mb-2">
-                {client}
-              </p>
-              <h2 className="font-sans font-semibold text-[1.75rem] leading-[1.2] tracking-[-0.02em] text-[var(--text-primary)] mb-3 max-w-[32ch]">
-                {title}
-              </h2>
-              <p className="font-sans text-sm text-[var(--accent)] mb-8">
-                Outcome: {outcome}
-              </p>
+              <p className="font-mono text-[0.6875rem] tracking-[0.14em] uppercase text-[var(--text-tertiary)] mb-2">{client}</p>
+              <h2 className="font-sans font-semibold text-[1.75rem] leading-[1.2] tracking-[-0.02em] text-[var(--text-primary)] mb-3 max-w-[32ch]">{title}</h2>
+              <p className="font-sans text-sm text-[var(--accent)] mb-8">Outcome: {outcome}</p>
 
               <div className="grid grid-cols-1 gap-8 md:grid-cols-3 border-t border-[var(--border-subtle)] pt-8">
                 <div>
-                  <span className="font-mono text-[0.6875rem] tracking-[0.14em] uppercase text-[var(--text-tertiary)] block mb-3">
-                    Challenge
-                  </span>
+                  <span className="font-mono text-[0.6875rem] tracking-[0.14em] uppercase text-[var(--text-tertiary)] block mb-3">Challenge</span>
                   <p className="font-serif text-sm leading-[1.65] text-[var(--text-secondary)]">{challenge}</p>
                 </div>
                 <div>
-                  <span className="font-mono text-[0.6875rem] tracking-[0.14em] uppercase text-[var(--text-tertiary)] block mb-3">
-                    Approach
-                  </span>
+                  <span className="font-mono text-[0.6875rem] tracking-[0.14em] uppercase text-[var(--text-tertiary)] block mb-3">Approach</span>
                   <p className="font-serif text-sm leading-[1.65] text-[var(--text-secondary)]">{approach}</p>
                 </div>
                 <div>
-                  <span className="font-mono text-[0.6875rem] tracking-[0.14em] uppercase text-[var(--text-tertiary)] block mb-3">
-                    Impact
-                  </span>
+                  <span className="font-mono text-[0.6875rem] tracking-[0.14em] uppercase text-[var(--text-tertiary)] block mb-3">Impact</span>
                   <p className="font-serif text-sm leading-[1.65] text-[var(--text-secondary)]">{impact}</p>
                 </div>
               </div>
@@ -156,27 +141,18 @@ export default function CaseStudiesPage() {
       </section>
 
       {/* CTA Band */}
-      <section
-        aria-label="Call to action"
-        className="bg-[var(--surface-sunken)] border-t border-[var(--border-subtle)]"
-      >
+      <section aria-label="Call to action" className="bg-[var(--surface-sunken)] border-t border-[var(--border-subtle)]">
         <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-24 flex flex-col gap-12 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <Eyebrow rule>Late-stage evaluation</Eyebrow>
-            <h2 className="font-sans font-semibold text-[3rem] leading-[1.1] tracking-[-0.02em] mt-4 max-w-[22ch]">
-              See your own problem in one of these?
-            </h2>
+            <h2 className="font-sans font-semibold text-[3rem] leading-[1.1] tracking-[-0.02em] mt-4 max-w-[22ch]">See your own problem in one of these?</h2>
             <p className="font-serif text-[1.125rem] leading-[1.65] text-[var(--text-secondary)] mt-4 max-w-[40ch]">
               A buyer who reads a full case study has already visualised their challenge. Let&apos;s discuss yours.
             </p>
           </div>
           <div className="flex gap-3 shrink-0">
-            <Button variant="primary" size="lg" as="a" href="/contact" iconRight={<ArrowRight size={17} />}>
-              Discuss a Similar Challenge
-            </Button>
-            <Button variant="secondary" size="lg" as="a" href="/contact">
-              Book a Discovery Call
-            </Button>
+            <Button variant="primary" size="lg" as="a" href="/contact" iconRight={<ArrowRight size={17} />}>Discuss a Similar Challenge</Button>
+            <Button variant="secondary" size="lg" as="a" href="/contact">Book a Discovery Call</Button>
           </div>
         </div>
       </section>
