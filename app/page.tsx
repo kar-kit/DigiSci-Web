@@ -1,5 +1,11 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, ArrowUpRight, Calendar, Route, Cpu, Database, TrendingUp, Layers, ShieldCheck, Compass } from 'lucide-react';
+
+export const metadata: Metadata = {
+  title: 'DigiSci — AI for Biotech & Pharma Operations',
+  description: 'Senior-led AI strategy, digital quality systems, and manufacturing transformation for biotech and pharmaceutical operations leaders.',
+};
 import { Button } from '@/components/ui/Button';
 import { Tag } from '@/components/ui/Tag';
 import { Card } from '@/components/ui/Card';
