@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
@@ -12,6 +13,7 @@ const NAV_LINKS = [
 ];
 
 export function Nav() {
+  const pathname                 = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen]         = useState(false);
 
@@ -60,15 +62,25 @@ export function Nav() {
 
           {/* Desktop nav */}
           <nav aria-label="Primary" className="ml-auto hidden md:flex items-center gap-8">
-            {NAV_LINKS.map(({ label, href }) => (
-              <Link
-                key={href}
-                href={href}
-                className="font-sans text-sm tracking-[0.04em] text-[--text-secondary] hover:text-[--text-primary] transition-colors duration-[120ms]"
-              >
-                {label}
-              </Link>
-            ))}
+            {NAV_LINKS.map(({ label, href }) => {
+              const active = pathname === href;
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  aria-current={active ? 'page' : undefined}
+                  className={[
+                    'font-sans text-sm tracking-[0.04em] transition-colors duration-[120ms]',
+                    'relative pb-px',
+                    active
+                      ? 'text-[--text-primary] after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-[--accent]'
+                      : 'text-[--text-secondary] hover:text-[--text-primary]',
+                  ].join(' ')}
+                >
+                  {label}
+                </Link>
+              );
+            })}
             <Button variant="primary" size="sm" as="a" href="/contact">
               Request a briefing
             </Button>
@@ -119,16 +131,24 @@ export function Nav() {
 
         {/* Nav links */}
         <nav aria-label="Mobile navigation" className="flex-1 flex flex-col px-6 py-8 overflow-y-auto">
-          {NAV_LINKS.map(({ label, href }) => (
-            <Link
-              key={href}
-              href={href}
-              onClick={() => setOpen(false)}
-              className="font-sans font-semibold text-[32px] leading-[1.1] tracking-[-0.01em] text-[--text-primary] py-5 border-b border-[--border-subtle] hover:text-[--accent] transition-colors duration-[120ms]"
-            >
-              {label}
-            </Link>
-          ))}
+          {NAV_LINKS.map(({ label, href }) => {
+            const active = pathname === href;
+            return (
+              <Link
+                key={href}
+                href={href}
+                aria-current={active ? 'page' : undefined}
+                onClick={() => setOpen(false)}
+                className={[
+                  'font-sans font-semibold text-[32px] leading-[1.1] tracking-[-0.01em]',
+                  'py-5 border-b border-[--border-subtle] transition-colors duration-[120ms]',
+                  active ? 'text-[--accent]' : 'text-[--text-primary] hover:text-[--accent]',
+                ].join(' ')}
+              >
+                {label}
+              </Link>
+            );
+          })}
 
           <div className="mt-auto pt-10">
             <Button
