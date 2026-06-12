@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { Tag } from '@/components/ui/Tag';
 import { Card } from '@/components/ui/Card';
@@ -9,6 +10,24 @@ const STATS = [
   { value: '40',  unit: '%',    label: 'Median cycle-time reduction' },
   { value: '100', unit: '%',    label: 'GxP-validated deployments' },
   { value: '9',   unit: 'figs', label: 'Supply at risk, de-risked' },
+] as const;
+
+const SECTORS = [
+  {
+    tag:         'Cell & Gene Therapy',
+    title:       'Living therapy manufacturing',
+    description: 'From viral vector production to CAR-T fill-finish — we understand the biology, the process variability, and the regulatory expectations that make CGT manufacturing uniquely demanding.',
+  },
+  {
+    tag:         'Pharmaceutical Manufacturing',
+    title:       'Pharmaceutical operations',
+    description: 'Batch record intelligence, deviation reduction, and supply-chain risk modelling for small-molecule and biologics operations running under 21 CFR Part 211 or EU GMP Annex.',
+  },
+  {
+    tag:         'AI in Regulated Environments',
+    title:       'AI built for GxP',
+    description: 'Explainable models, validated pipelines, and audit-ready documentation — AI deployments that satisfy regulators, not just data scientists.',
+  },
 ] as const;
 
 const SERVICES = [
@@ -92,6 +111,37 @@ export default function HomePage() {
               </p>
             </Card>
           ))}
+        </div>
+      </section>
+
+      {/* ── Industry sectors ── */}
+      <section aria-label="Industry sectors" className="bg-[--surface-sunken] border-t border-b border-[--border-subtle]">
+        <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-24">
+          <Eyebrow rule>Who we work with</Eyebrow>
+          <h2 className="font-sans font-semibold text-[40px] leading-[1.1] tracking-[-0.02em] mt-4 mb-12 max-w-[22ch]">
+            Deep expertise in the sectors that demand it most.
+          </h2>
+
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
+            {SECTORS.map(({ tag, title, description }) => (
+              <div key={tag} className="flex flex-col gap-4">
+                <Tag variant="sector">{tag}</Tag>
+                <h3 className="font-sans font-semibold text-[22px] leading-snug tracking-[-0.01em] text-[--text-primary]">
+                  {title}
+                </h3>
+                <p className="font-serif text-base leading-[1.65] text-[--text-secondary] flex-1">
+                  {description}
+                </p>
+                <Link
+                  href="/industry"
+                  className="font-sans text-sm tracking-[0.04em] text-[--accent] hover:text-[--accent-hover] transition-colors duration-[120ms] self-start"
+                  aria-label={`Learn more about our ${tag} expertise`}
+                >
+                  Learn more →
+                </Link>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
