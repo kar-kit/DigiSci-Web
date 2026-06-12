@@ -54,14 +54,17 @@ describe('DGS-A1-01 — Nav structure', () => {
     assert.ok(src.includes('href="/"'), 'logo home link missing');
   });
 
-  test('nav links present (Approach, Sectors, About)', () => {
-    assert.ok(src.includes('Approach'), 'Approach link missing');
-    assert.ok(src.includes('Sectors') || src.includes('sectors'), 'Sectors link missing');
-    assert.ok(src.includes('About') || src.includes('about'), 'About link missing');
+  test('nav links present (About, Services, Industry Expertise, Case Studies, Insights, Contact)', () => {
+    assert.ok(src.includes('About'), 'About link missing');
+    assert.ok(src.includes('Services') || src.includes('/services'), 'Services link missing');
+    assert.ok(src.includes('Industry Expertise') || src.includes('/industry'), 'Industry Expertise link missing');
+    assert.ok(src.includes('Case Studies') || src.includes('/case-studies'), 'Case Studies link missing');
+    assert.ok(src.includes('Insights') || src.includes('/insights'), 'Insights link missing');
+    assert.ok(src.includes('Contact') || src.includes('/contact'), 'Contact link missing');
   });
 
   test('CTA button present', () => {
-    assert.ok(src.includes('Request a briefing') || src.includes('briefing'), 'CTA button missing');
+    assert.ok(src.includes('Book a Discovery Call') || src.includes('Discovery Call'), 'CTA button missing');
   });
 });
 

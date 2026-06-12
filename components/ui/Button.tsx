@@ -13,9 +13,9 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const VARIANT_CLASSES: Record<Variant, string> = {
-  primary:   'bg-[--color-accent] text-[--color-accent-text] hover:bg-[--color-accent-hover] active:bg-[--color-accent-press]',
-  secondary: 'bg-transparent text-[--color-text-primary] border border-[--color-border-strong] hover:border-[--color-accent] hover:text-[--color-text-accent]',
-  ghost:     'bg-transparent text-[--color-text-secondary] hover:text-[--color-text-primary] hover:bg-[--color-border-subtle] px-3',
+  primary:   'border-transparent bg-[var(--color-accent)] text-[var(--color-accent-text)] hover:bg-[var(--color-accent-hover)] active:bg-[var(--color-accent-press)]',
+  secondary: 'bg-transparent text-[var(--color-text-primary)] border-[var(--color-border-strong)] hover:border-[var(--color-accent)] hover:text-[var(--color-text-accent)]',
+  ghost:     'border-transparent bg-transparent text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-border-subtle)] px-3',
 };
 
 const SIZE_CLASSES: Record<Size, string> = {
@@ -37,7 +37,7 @@ export function Button({
   const cls = [
     'inline-flex items-center justify-center gap-[10px]',
     'font-sans font-semibold tracking-[0.04em] leading-none whitespace-nowrap',
-    'border border-transparent rounded-[2px]',
+    'border rounded-[2px]',
     'cursor-pointer select-none no-underline',
     'transition-[background,border-color,color,transform] duration-[120ms]',
     'focus-visible:outline-none active:translate-y-px disabled:opacity-40 disabled:pointer-events-none',

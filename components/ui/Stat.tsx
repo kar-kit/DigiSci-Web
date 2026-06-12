@@ -15,21 +15,21 @@ export function Stat({ value, unit, label, size = 'md' }: StatProps) {
     <div className="flex flex-col gap-[10px]">
       <div className="flex items-baseline gap-1 leading-[0.95]">
         <span className={[
-          'font-sans font-semibold tracking-[-0.02em] text-[--color-text-primary] tabular-nums',
+          'font-sans font-semibold tracking-[-0.02em] text-[var(--color-text-primary)] tabular-nums',
           size === 'sm' ? 'text-[3rem]' : 'text-[4rem]',
         ].join(' ')}>
           {value}
         </span>
         {unit && (
           <span className={[
-            'font-mono font-medium text-[--color-text-accent] self-start mt-[0.15em]',
+            'font-mono font-medium text-[var(--color-text-accent)] self-start mt-[0.15em]',
             size === 'sm' ? 'text-[1.26rem]' : 'text-[1.68rem]',
           ].join(' ')}>
             {unit}
           </span>
         )}
       </div>
-      <p className="font-mono text-[0.6875rem] tracking-[0.14em] uppercase text-[--color-text-secondary]">
+      <p className="font-mono text-[0.6875rem] tracking-[0.14em] uppercase text-[var(--color-text-secondary)]">
         {label}
       </p>
     </div>

@@ -1,6 +1,7 @@
 /**
- * DGS-C1: Homepage sections — hero, proof band, services, CTA
- * Tests presence of all required sections, copy, components, and attributes.
+ * DGS-C1: Homepage sections — hero, industry context, value proposition,
+ * services overview, insights teaser, CTA.
+ * Updated to reflect actual design_mockup spec.
  */
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
@@ -20,7 +21,7 @@ describe('DGS-C1-01 — Hero section', () => {
 
   test('h1 headline present', () => {
     assert.ok(src.includes('<h1'), 'h1 missing');
-    assert.ok(src.includes('GMP'), 'headline copy missing ("GMP.")');
+    assert.ok(src.includes('Biotech Operations'), 'headline copy missing ("Biotech Operations")');
   });
 
   test('hero has grid-bg texture', () => {
@@ -31,7 +32,7 @@ describe('DGS-C1-01 — Hero section', () => {
     assert.ok(src.includes('pt-[128px]') || src.includes('128px'), 'hero top padding 128px missing');
   });
 
-  test('accent colour on GMP span', () => {
+  test('accent colour on headline span', () => {
     assert.ok(src.includes('text-[--accent]') || src.includes('accent'), 'accent colour on headline missing');
   });
 
@@ -41,37 +42,50 @@ describe('DGS-C1-01 — Hero section', () => {
     assert.ok(src.includes('AI Systems'), 'AI Systems tag missing');
   });
 
-  test('primary CTA button "Request a briefing"', () => {
-    assert.ok(src.includes('Request a briefing'), 'primary CTA missing');
+  test('primary CTA button "Book a Discovery Call"', () => {
+    assert.ok(src.includes('Book a Discovery Call'), 'primary CTA missing');
   });
 
-  test('secondary CTA "Read the approach"', () => {
-    assert.ok(src.includes('Read the approach') || src.includes('approach'), 'secondary CTA missing');
+  test('secondary CTA "Explore Services"', () => {
+    assert.ok(src.includes('Explore Services'), 'secondary CTA missing');
+  });
+
+  test('data panel label "Operational readiness"', () => {
+    assert.ok(src.includes('Operational readiness'), 'data panel label missing');
   });
 });
 
-describe('DGS-C1-02 — Proof band (key stats)', () => {
-  test('proof band aria-label', () => {
-    assert.ok(src.includes('aria-label="Key metrics"') || src.includes('Key metrics'), 'proof band aria-label missing');
+describe('DGS-C1-02 — Industry context and value proposition', () => {
+  test('industry context section present', () => {
+    assert.ok(
+      src.includes('aria-label="Industry context"') || src.includes('Industry context'),
+      'industry context section missing',
+    );
   });
 
-  test('proof band has sunken bg', () => {
-    assert.ok(src.includes('surface-sunken'), 'sunken background missing from proof band');
+  test('operational inflection point headline', () => {
+    assert.ok(src.includes('operational inflection point'), 'industry context headline missing');
   });
 
-  test('4 stats present (12 wks, 40%, 100%, 9 figs)', () => {
-    assert.ok(src.includes('12'), 'stat 12 wks missing');
-    assert.ok(src.includes('40'), 'stat 40% missing');
-    assert.ok(src.includes('100'), 'stat 100% missing');
-    assert.ok(src.includes('9'), 'stat 9 figs missing');
+  test('value proposition section present', () => {
+    assert.ok(
+      src.includes('aria-label="Value proposition"') || src.includes('Operational expertise meets'),
+      'value proposition section missing',
+    );
   });
 
-  test('proof band grid layout (sm:grid-cols-4)', () => {
-    assert.ok(src.includes('grid-cols') && src.includes('4'), 'proof band 4-col grid missing');
+  test('4 pillars present', () => {
+    assert.ok(src.includes('Domain Depth'), 'Domain Depth pillar missing');
+    assert.ok(src.includes('AI Transformation'), 'AI Transformation pillar missing');
+    assert.ok(src.includes('Regulatory Awareness'), 'Regulatory Awareness pillar missing');
+    assert.ok(src.includes('Strategic Clarity'), 'Strategic Clarity pillar missing');
   });
 
-  test('Stat component used', () => {
-    assert.ok(src.includes('<Stat') || src.includes('Stat'), 'Stat component not used');
+  test('credibility bar present', () => {
+    assert.ok(
+      src.includes('GxP Quality Systems') || src.includes('Operating across'),
+      'credibility bar missing',
+    );
   });
 });
 
@@ -80,14 +94,15 @@ describe('DGS-C1 — Services section', () => {
     assert.ok(src.includes('aria-label="Services"'), 'services aria-label missing');
   });
 
-  test('3 service cards present', () => {
-    assert.ok(src.includes('Cell &amp; Gene Therapy') || src.includes('Cell'), 'service 1 missing');
-    assert.ok(src.includes('Operations intelligence') || src.includes('Operations'), 'service 2 missing');
-    assert.ok(src.includes('AI built for GxP') || src.includes('GxP'), 'service 3 missing');
+  test('4 service cards present', () => {
+    assert.ok(src.includes('AI Transformation Strategy'), 'service 1 (AI Transformation Strategy) missing');
+    assert.ok(src.includes('AI Implementation'), 'service 2 (AI Implementation) missing');
+    assert.ok(src.includes('Digital Operations'), 'service 3 (Digital Operations) missing');
+    assert.ok(src.includes('Operational Excellence'), 'service 4 (Operational Excellence) missing');
   });
 
-  test('services section py-32 spacing', () => {
-    assert.ok(src.includes('py-32'), 'services section py-32 spacing missing');
+  test('section uses design-system spacing (py-24 or py-32)', () => {
+    assert.ok(src.includes('py-24') || src.includes('py-32'), 'section padding missing');
   });
 
   test('Card component used', () => {
@@ -106,12 +121,12 @@ describe('DGS-C1 — CTA section', () => {
   });
 
   test('CTA headline present', () => {
-    assert.ok(src.includes('Bring AI to your most regulated work'), 'CTA headline missing');
+    assert.ok(src.includes('Working on an operational transformation challenge'), 'CTA headline missing');
   });
 
   test('CTA has primary button', () => {
     const ctaSection = src.slice(src.lastIndexOf('Call to action'));
-    assert.ok(ctaSection.includes('Request a briefing'), 'CTA primary button missing');
+    assert.ok(ctaSection.includes('Book a Discovery Call'), 'CTA primary button missing');
   });
 
   test('CTA responsive layout (sm:flex-row)', () => {

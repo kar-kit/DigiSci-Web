@@ -5,13 +5,16 @@ import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
-import { ArrowRight } from 'lucide-react';
+import { Calendar } from 'lucide-react';
 
 const NAV_LINKS = [
-  { label: 'Approach',     href: '/approach' },
-  { label: 'Sectors',      href: '/sectors' },
-  { label: 'Intelligence', href: '/intelligence' },
-  { label: 'About',        href: '/about' },
+  { label: 'Home',               href: '/' },
+  { label: 'About',              href: '/about' },
+  { label: 'Services',           href: '/services' },
+  { label: 'Industry Expertise', href: '/industry' },
+  { label: 'Case Studies',       href: '/case-studies' },
+  { label: 'Insights',           href: '/insights' },
+  { label: 'Contact',            href: '/contact' },
 ];
 
 export function Nav() {
@@ -32,7 +35,6 @@ export function Nav() {
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
-  // Prevent body scroll while overlay is open
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
@@ -46,7 +48,7 @@ export function Nav() {
           'fixed top-0 inset-x-0 z-[100] h-[72px]',
           'transition-[background,backdrop-filter,border-color] duration-[180ms]',
           scrolled || open
-            ? 'bg-[rgba(10,22,40,0.96)] backdrop-blur-[12px] border-b border-[--border-subtle]'
+            ? 'bg-[rgba(10,22,40,0.96)] backdrop-blur-[12px] border-b border-[var(--border-subtle)]'
             : 'bg-transparent border-b border-transparent',
         ].join(' ')}
       >
@@ -63,7 +65,7 @@ export function Nav() {
           </Link>
 
           {/* Desktop nav */}
-          <nav aria-label="Primary" className="ml-auto hidden md:flex items-center gap-8">
+          <nav aria-label="Primary" className="ml-auto hidden md:flex items-center gap-6">
             {NAV_LINKS.map(({ label, href }) => {
               const active = pathname === href;
               return (
@@ -75,19 +77,16 @@ export function Nav() {
                     'font-sans text-sm tracking-[0.04em] transition-colors duration-[120ms]',
                     'relative pb-px',
                     active
-                      ? 'text-[--text-primary] after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-[--accent]'
-                      : 'text-[--text-secondary] hover:text-[--text-primary]',
+                      ? 'text-[var(--text-primary)] after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-[var(--accent)]'
+                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]',
                   ].join(' ')}
                 >
                   {label}
                 </Link>
               );
             })}
-            <Button variant="ghost" size="sm" as="a" href="/client-login">
-              Client login
-            </Button>
-            <Button variant="primary" size="sm" as="a" href="/contact" iconRight={<ArrowRight size={15} />}>
-              Request a briefing
+            <Button variant="primary" size="sm" as="a" href="/contact" iconRight={<Calendar size={15} />}>
+              Book a Discovery Call
             </Button>
           </nav>
 
@@ -97,18 +96,18 @@ export function Nav() {
             aria-expanded={open}
             aria-controls="mobile-nav-overlay"
             onClick={() => setOpen(o => !o)}
-            className="ml-auto md:hidden flex flex-col justify-center items-center w-11 h-11 gap-[6px] rounded-[2px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--accent]"
+            className="ml-auto md:hidden flex flex-col justify-center items-center w-11 h-11 gap-[6px] rounded-[2px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
           >
             <span className={[
-              'block w-6 h-px bg-[--text-primary] transition-[transform,opacity] duration-[180ms] origin-center',
+              'block w-6 h-px bg-[var(--text-primary)] transition-[transform,opacity] duration-[180ms] origin-center',
               open ? 'translate-y-[7px] rotate-45' : '',
             ].join(' ')} />
             <span className={[
-              'block w-6 h-px bg-[--text-primary] transition-opacity duration-[180ms]',
+              'block w-6 h-px bg-[var(--text-primary)] transition-opacity duration-[180ms]',
               open ? 'opacity-0' : '',
             ].join(' ')} />
             <span className={[
-              'block w-6 h-px bg-[--text-primary] transition-[transform,opacity] duration-[180ms] origin-center',
+              'block w-6 h-px bg-[var(--text-primary)] transition-[transform,opacity] duration-[180ms] origin-center',
               open ? '-translate-y-[7px] -rotate-45' : '',
             ].join(' ')} />
           </button>
@@ -124,17 +123,15 @@ export function Nav() {
         aria-hidden={!open}
         className={[
           'fixed inset-0 z-[99] md:hidden',
-          'bg-[--surface-base] flex flex-col',
+          'bg-[var(--surface-base)] flex flex-col',
           'transition-[opacity,transform] duration-[280ms]',
           open
             ? 'opacity-100 translate-y-0 pointer-events-auto'
             : 'opacity-0 -translate-y-4 pointer-events-none',
         ].join(' ')}
       >
-        {/* Overlay header spacer (height of fixed nav) */}
         <div className="h-[72px] shrink-0" />
 
-        {/* Nav links */}
         <nav aria-label="Mobile navigation" className="flex-1 flex flex-col px-6 py-8 overflow-y-auto">
           {NAV_LINKS.map(({ label, href }) => {
             const active = pathname === href;
@@ -146,8 +143,8 @@ export function Nav() {
                 onClick={() => setOpen(false)}
                 className={[
                   'font-sans font-semibold text-[32px] leading-[1.1] tracking-[-0.01em]',
-                  'py-5 border-b border-[--border-subtle] transition-colors duration-[120ms]',
-                  active ? 'text-[--accent]' : 'text-[--text-primary] hover:text-[--accent]',
+                  'py-5 border-b border-[var(--border-subtle)] transition-colors duration-[120ms]',
+                  active ? 'text-[var(--accent)]' : 'text-[var(--text-primary)] hover:text-[var(--accent)]',
                 ].join(' ')}
               >
                 {label}
@@ -164,7 +161,7 @@ export function Nav() {
               onClick={() => setOpen(false)}
               className="w-full justify-center"
             >
-              Request a briefing
+              Book a Discovery Call
             </Button>
           </div>
         </nav>

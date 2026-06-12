@@ -4,20 +4,22 @@ interface EyebrowProps {
   children: React.ReactNode;
   rule?: boolean;
   muted?: boolean;
+  index?: string;
   className?: string;
 }
 
 // DS spec: mono xs (12px), tracking-label (0.14em), uppercase
 // Rule: 28px wide × 1px high, accent color
-export function Eyebrow({ children, rule, muted, className = '' }: EyebrowProps) {
+export function Eyebrow({ children, rule, muted, index, className = '' }: EyebrowProps) {
   return (
     <p className={[
       'font-mono text-xs font-medium tracking-[0.14em] uppercase',
       'inline-flex items-center gap-3',
-      muted ? 'text-[--color-text-tertiary]' : 'text-[--color-text-accent]',
+      muted ? 'text-[var(--color-text-tertiary)]' : 'text-[var(--color-text-accent)]',
       className,
     ].filter(Boolean).join(' ')}>
-      {rule && <span className="block w-7 h-px bg-[--color-accent] shrink-0" />}
+      {rule && <span className="block w-7 h-px bg-[var(--color-accent)] shrink-0" />}
+      {index && <span className="text-[var(--text-tertiary)]">{index}</span>}
       {children}
     </p>
   );

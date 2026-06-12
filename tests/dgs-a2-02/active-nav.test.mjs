@@ -44,13 +44,13 @@ describe('DGS-A2-02 — ARIA active indicator', () => {
 });
 
 describe('DGS-A2-02 — Visual active style — desktop', () => {
-  test('active link uses text-[--text-primary] colour', () => {
-    assert.ok(src.includes('text-[--text-primary]'), 'active link must use text-[--text-primary]');
+  test('active link uses text-[var(--text-primary)] colour', () => {
+    assert.ok(src.includes('text-[var(--text-primary)]'), 'active link must use text-[var(--text-primary)]');
   });
 
   test('active link has accent underline via after: pseudo-element', () => {
     assert.ok(
-      src.includes('after:absolute') && src.includes('after:bg-[--accent]'),
+      src.includes('after:absolute') && src.includes('after:bg-[var(--accent)]'),
       'active link must have accent-coloured after: underline',
     );
   });
@@ -63,18 +63,18 @@ describe('DGS-A2-02 — Visual active style — desktop', () => {
     assert.ok(src.includes('after:h-px'), 'underline must be 1px (after:h-px)');
   });
 
-  test('inactive link uses text-[--text-secondary]', () => {
-    assert.ok(src.includes('text-[--text-secondary]'), 'inactive link must use text-[--text-secondary]');
+  test('inactive link uses text-[var(--text-secondary)]', () => {
+    assert.ok(src.includes('text-[var(--text-secondary)]'), 'inactive link must use text-[var(--text-secondary)]');
   });
 });
 
 describe('DGS-A2-02 — Visual active style — mobile overlay', () => {
   test('active mobile link uses accent colour', () => {
-    assert.ok(src.includes("active ? 'text-[--accent]'"), 'active mobile link must use text-[--accent]');
+    assert.ok(src.includes("active ? 'text-[var(--accent)]'"), 'active mobile link must use text-[var(--accent)]');
   });
 
-  test('inactive mobile link still has hover:text-[--accent]', () => {
-    assert.ok(src.includes('hover:text-[--accent]'), 'inactive mobile links must have hover accent state');
+  test('inactive mobile link still has hover:text-[var(--accent)]', () => {
+    assert.ok(src.includes('hover:text-[var(--accent)]'), 'inactive mobile links must have hover accent state');
   });
 
   test('mobile links also carry aria-current', () => {

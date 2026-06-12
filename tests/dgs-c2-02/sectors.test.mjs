@@ -1,7 +1,8 @@
 /**
- * DGS-C2-02: Industry sectors section on homepage
+ * DGS-C2-02: Industry sectors section
+ * Sectors are on the /industry page (not homepage) per design_mockup/index.html.
  * AC: Section showing 3 sectors: Cell & Gene Therapy, Pharmaceutical Manufacturing,
- * AI in Regulated Environments. Each with brief description and link to /industry.
+ * AI in Regulated Environments. Each with brief description.
  */
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
@@ -11,7 +12,7 @@ import { fileURLToPath } from 'node:url';
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 const ROOT  = join(__dir, '..', '..');
-const src   = readFileSync(join(ROOT, 'app/page.tsx'), 'utf8');
+const src   = readFileSync(join(ROOT, 'app/industry/page.tsx'), 'utf8');
 
 describe('DGS-C2-02 — Sectors section structure', () => {
   test('section has aria-label="Industry sectors"', () => {
@@ -47,7 +48,6 @@ describe('DGS-C2-02 — All three sectors present', () => {
 
 describe('DGS-C2-02 — Sector cards content', () => {
   test('sector card template has h3 title', () => {
-    // map() renders one template — check the template has an h3
     const sectorsBlock = src.slice(src.indexOf('SECTORS.map'));
     assert.ok(sectorsBlock.includes('<h3'), 'h3 title missing from sectors map template');
   });
@@ -63,11 +63,7 @@ describe('DGS-C2-02 — Sector cards content', () => {
   });
 });
 
-describe('DGS-C2-02 — Links to Industry Expertise page', () => {
-  test('links to /industry present', () => {
-    assert.ok(src.includes('href="/industry"'), 'href="/industry" missing from sectors section');
-  });
-
+describe('DGS-C2-02 — Learn more links present', () => {
   test('learn more links present', () => {
     assert.ok(src.includes('Learn more'), '"Learn more" link text missing');
   });
@@ -80,7 +76,7 @@ describe('DGS-C2-02 — Links to Industry Expertise page', () => {
 });
 
 describe('DGS-C2-02 — No raw CSS', () => {
-  test('no hardcoded hex colours in page.tsx', () => {
+  test('no hardcoded hex colours in industry page', () => {
     const hexCount = (src.match(/#[0-9A-Fa-f]{3,6}\b/g) || []).length;
     assert.equal(hexCount, 0, `${hexCount} hardcoded hex colours found`);
   });

@@ -35,7 +35,7 @@ describe('DGS-B1-03 — Cookie Policy link', () => {
 
 describe('DGS-B1-03 — Legal link styling', () => {
   test('legal links use muted text colour (tertiary)', () => {
-    assert.ok(footer.includes('text-[--text-tertiary]'), 'legal links should use tertiary muted text');
+    assert.ok(footer.includes('text-[var(--text-tertiary)]'), 'legal links should use tertiary muted text');
   });
 
   test('legal links use mono font (small print convention)', () => {

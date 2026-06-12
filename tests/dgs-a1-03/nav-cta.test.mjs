@@ -22,8 +22,8 @@ describe('DGS-A1-03 — CTA button', () => {
     assert.ok(src.includes('href="/contact"'), 'CTA href="/contact" missing');
   });
 
-  test('CTA text "Request a briefing"', () => {
-    assert.ok(src.includes('Request a briefing'), 'CTA copy missing');
+  test('CTA text "Book a Discovery Call"', () => {
+    assert.ok(src.includes('Book a Discovery Call'), 'CTA copy missing');
   });
 });
 
