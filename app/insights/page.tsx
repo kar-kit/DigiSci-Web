@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
@@ -91,6 +94,19 @@ const ARTICLES = [
 const FILTERS = ['All', 'AI in Pharma Ops', 'CGT Manufacturing', 'Digital Quality Systems', 'Future Operating Models'] as const;
 
 export default function InsightsPage() {
+  const [activeFilter, setActiveFilter] = useState<string>('All');
+
+  const filteredArticles = activeFilter === 'All'
+    ? ARTICLES
+    : ARTICLES.filter((a) => a.tag === activeFilter);
+
+  const tagCounts = FILTERS.reduce<Record<string, number>>((acc, label) => {
+    acc[label] = label === 'All'
+      ? ARTICLES.length
+      : ARTICLES.filter((a) => a.tag === label).length;
+    return acc;
+  }, {});
+
   return (
     <main>
 
@@ -148,21 +164,29 @@ export default function InsightsPage() {
       {/* Filter bar */}
       <section aria-label="Filter bar" className="border-b border-[var(--border-subtle)] bg-[var(--surface-sunken)]">
         <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-4 flex items-center gap-2 flex-wrap">
-          {FILTERS.map((label, i) => (
-            <button
-              key={label}
-              className={[
-                'font-sans text-sm px-4 py-2 border transition-colors duration-[120ms]',
-                i === 0
-                  ? 'border-[var(--accent)] text-[var(--accent)]'
-                  : 'border-[var(--border-default)] text-[var(--text-tertiary)] hover:border-[var(--border-strong)] hover:text-[var(--text-primary)]',
-              ].join(' ')}
-            >
-              {label}
-            </button>
-          ))}
+          {FILTERS.map((label) => {
+            const isActive = label === activeFilter;
+            return (
+              <button
+                key={label}
+                onClick={() => setActiveFilter(label)}
+                aria-pressed={isActive}
+                className={[
+                  'font-sans text-sm px-4 py-2 border transition-colors duration-[120ms]',
+                  isActive
+                    ? 'border-[var(--accent)] text-[var(--accent)]'
+                    : 'border-[var(--border-default)] text-[var(--text-tertiary)] hover:border-[var(--border-strong)] hover:text-[var(--text-primary)]',
+                ].join(' ')}
+              >
+                {label}
+                {label !== 'All' && tagCounts[label] > 0 && (
+                  <span className="ml-1.5 font-mono text-[0.6rem] opacity-60">{tagCounts[label]}</span>
+                )}
+              </button>
+            );
+          })}
           <span className="ml-auto font-mono text-[0.6875rem] tracking-[0.14em] uppercase text-[var(--text-tertiary)]">
-            9 articles
+            {filteredArticles.length} article{filteredArticles.length !== 1 ? 's' : ''}
           </span>
         </div>
       </section>
@@ -171,7 +195,7 @@ export default function InsightsPage() {
       <section aria-label="Article grid" className="border-b border-[var(--border-subtle)]">
         <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-16">
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {ARTICLES.map(({ slug, tag, date, title, excerpt, readTime }) => (
+            {filteredArticles.map(({ slug, tag, date, title, excerpt, readTime }) => (
               <Link
                 key={slug}
                 href={`/insights/${slug}`}
