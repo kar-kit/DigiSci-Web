@@ -531,6 +531,32 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
         </div>
       </section>
 
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Article',
+            headline: article.title,
+            description: article.excerpt,
+            author: {
+              '@type': 'Person',
+              name: 'Kwok Pang',
+              url: 'https://www.linkedin.com/in/kwok-pang',
+            },
+            publisher: {
+              '@type': 'Organization',
+              name: 'DigiSci',
+              url: 'https://digisci.solutions',
+            },
+            datePublished: article.date,
+            mainEntityOfPage: {
+              '@type': 'WebPage',
+              '@id': `https://digisci.solutions/insights/${article.slug}`,
+            },
+          }),
+        }}
+      />
     </main>
   );
 }

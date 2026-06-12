@@ -18,6 +18,18 @@ export const metadata: Metadata = {
   },
 };
 
+const ORGANIZATION_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'DigiSci',
+  url: 'https://digisci.solutions',
+  logo: {
+    '@type': 'ImageObject',
+    url: 'https://digisci.solutions/assets/logo-lockup.svg',
+  },
+  sameAs: ['https://www.linkedin.com/in/kwok-pang'],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -29,6 +41,10 @@ export default function RootLayout({
         <Nav />
         {children}
         <Footer />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(ORGANIZATION_SCHEMA) }}
+        />
       </body>
     </html>
   );
