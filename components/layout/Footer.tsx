@@ -49,9 +49,23 @@ export function Footer() {
 
         {/* Bottom bar */}
         <div className="mt-12 pt-6 border-t border-[--border-subtle] flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <p className="font-mono text-xs tracking-[0.04em] text-[--text-tertiary]">
-            © {new Date().getFullYear()} DigiSci Solutions Ltd. All rights reserved.
-          </p>
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+            <p className="font-mono text-xs tracking-[0.04em] text-[--text-tertiary]">
+              © {new Date().getFullYear()} DigiSci Solutions Ltd. All rights reserved.
+            </p>
+            <Link
+              href="/privacy"
+              className="font-mono text-xs tracking-[0.04em] text-[--text-tertiary] hover:text-[--text-secondary] transition-colors duration-[120ms]"
+            >
+              Privacy Policy
+            </Link>
+            <Link
+              href="/cookies"
+              className="font-mono text-xs tracking-[0.04em] text-[--text-tertiary] hover:text-[--text-secondary] transition-colors duration-[120ms]"
+            >
+              Cookie Policy
+            </Link>
+          </div>
 
           {/* Contact links */}
           <div className="flex items-center gap-5">
