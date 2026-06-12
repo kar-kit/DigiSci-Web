@@ -1,6 +1,12 @@
+import type { Metadata } from 'next';
 import { ArrowRight, Check } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Eyebrow } from '@/components/ui/Eyebrow';
+
+export const metadata: Metadata = {
+  title: 'Services | AI Strategy & Digital Ops | DigiSci',
+  description: 'AI strategy, implementation programmes, digital operations, and productised offers for biotech and pharmaceutical operations. Senior-led, principal-delivered.',
+};
 
 const SERVICES = [
   {

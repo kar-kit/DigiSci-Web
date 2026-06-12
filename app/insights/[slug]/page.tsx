@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowRight } from 'lucide-react';
@@ -340,6 +341,16 @@ const ARTICLES: Article[] = [
     ],
   },
 ] as const;
+
+export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
+  const { slug } = await params;
+  const article = ARTICLES.find((a) => a.slug === slug);
+  if (!article) return {};
+  return {
+    title: `${article.title} | DigiSci Insights`,
+    description: article.excerpt,
+  };
+}
 
 export function generateStaticParams(): Params[] {
   return ARTICLES.map(({ slug }) => ({ slug }));

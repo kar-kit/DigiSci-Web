@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
@@ -71,6 +72,16 @@ const CASE_STUDIES = [
 ] as const;
 
 type Params = { slug: string };
+
+export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
+  const { slug } = await params;
+  const study = CASE_STUDIES.find((s) => s.slug === slug);
+  if (!study) return {};
+  return {
+    title: `${study.title} | DigiSci Case Study`,
+    description: `${study.outcome} — ${study.client}. A DigiSci case study in ${study.sector}.`,
+  };
+}
 
 export function generateStaticParams(): Params[] {
   return CASE_STUDIES.map(({ slug }) => ({ slug }));

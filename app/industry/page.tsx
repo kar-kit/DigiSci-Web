@@ -1,6 +1,12 @@
+import type { Metadata } from 'next';
 import { ArrowRight, Check, Dna, Factory, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Eyebrow } from '@/components/ui/Eyebrow';
+
+export const metadata: Metadata = {
+  title: 'Industry Expertise | CGT & Pharma AI | DigiSci',
+  description: 'Deep sector knowledge across cell and gene therapy, pharmaceutical manufacturing, and AI in regulated environments. Built from operational experience.',
+};
 import { Tag } from '@/components/ui/Tag';
 
 const CGT_TAGS    = ['Patient-specific mfg', 'ATMP regulations', 'Chain of identity', 'GMP cell therapy'] as const;

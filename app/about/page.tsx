@@ -1,5 +1,11 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, UserCheck, Users, Globe } from 'lucide-react';
+
+export const metadata: Metadata = {
+  title: 'About DigiSci | Senior-Led AI Consulting',
+  description: 'Meet Kwok Pang and the DigiSci team. Deep domain expertise in pharmaceutical operations, CGT manufacturing, and AI strategy — delivered by principals.',
+};
 
 function LinkedinIcon({ size = 16 }: { size?: number }) {
   return (
