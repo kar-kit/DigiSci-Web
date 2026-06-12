@@ -244,6 +244,23 @@ export default function AboutPage() {
         </div>
       </section>
 
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Person',
+            name: 'Kwok Pang',
+            jobTitle: 'Founder & Principal Consultant',
+            worksFor: {
+              '@type': 'Organization',
+              name: 'DigiSci',
+              url: 'https://digisci.solutions',
+            },
+            sameAs: 'https://www.linkedin.com/in/kwok-pang',
+          }),
+        }}
+      />
     </main>
   );
 }
