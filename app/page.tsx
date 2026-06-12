@@ -25,6 +25,30 @@ const CRED_TAGS = [
   'AI Strategy', 'Digital Operations', 'Regulated Environments', 'CDMO',
 ] as const;
 
+const CASE_STUDIES = [
+  {
+    sector:  'Biopharmaceutical',
+    service: 'AI Implementation',
+    client:  'Global Life Sciences Consulting Firm · Regulatory Affairs',
+    title:   'AI-Enabled Regulatory Documentation Platform',
+    outcome: 'CTD drafting accelerated',
+  },
+  {
+    sector:  'Cell & Gene Therapy',
+    service: 'AI Strategy',
+    client:  'Emerging Biotech (Advanced Therapies)',
+    title:   'Digital Pharmaceutical Quality System Blueprint',
+    outcome: 'Inspection-ready roadmap',
+  },
+  {
+    sector:  'Cell & Gene Therapy',
+    service: 'Digital Ops',
+    client:  'Cell & Gene Therapy Development Company',
+    title:   'Manufacturing Data Architecture for Cell Therapy Operations',
+    outcome: 'Unified operational data layer',
+  },
+] as const;
+
 const INSIGHTS = [
   { tag: 'AI in Pharma Ops',  date: 'May 2026', title: 'The Future of AI in Biopharmaceutical Quality Systems', read: '8 min' },
   { tag: 'CGT Manufacturing', date: 'Apr 2026', title: 'The Digital Future of Cell Therapy Manufacturing',      read: '6 min' },
@@ -216,6 +240,53 @@ export default function HomePage() {
           <div className="mt-10">
             <Button variant="secondary" as="a" href="/services" iconRight={<ArrowRight size={16} />}>
               View all services
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* §06.5 Case Studies */}
+      <section aria-label="Case studies" className="border-b border-[var(--border-subtle)]">
+        <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-24">
+          <div className="max-w-[44rem] mb-12">
+            <Eyebrow rule>Client work</Eyebrow>
+            <h2 className="font-sans font-semibold text-[3rem] leading-[1.1] tracking-[-0.02em] mt-4">
+              Three recent engagements.
+            </h2>
+            <p className="font-serif text-[1.125rem] leading-[1.65] text-[var(--text-secondary)] mt-4">
+              Client details are anonymised in line with confidentiality commitments.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+            {CASE_STUDIES.map(({ sector, service, client, title, outcome }) => (
+              <article
+                key={title}
+                className="flex flex-col gap-4 bg-[var(--navy-800)] border border-[var(--border-default)] p-8"
+              >
+                <div className="flex flex-wrap gap-2">
+                  <Tag variant="sector" dot>{sector}</Tag>
+                  <Tag variant="accent">{service}</Tag>
+                </div>
+                <span className="font-mono text-[0.6875rem] tracking-[0.14em] uppercase text-[var(--text-tertiary)]">
+                  {client}
+                </span>
+                <h3 className="font-sans font-semibold text-[1.25rem] leading-snug tracking-[-0.01em] text-[var(--text-primary)] flex-1">
+                  {title}
+                </h3>
+                <div>
+                  <span className="font-mono text-[0.6875rem] tracking-[0.14em] uppercase text-[var(--text-tertiary)] block mb-1">
+                    Outcome
+                  </span>
+                  <span className="font-sans text-[1.125rem] font-semibold text-[var(--accent)] leading-[1.15]">
+                    {outcome}
+                  </span>
+                </div>
+              </article>
+            ))}
+          </div>
+          <div className="mt-10">
+            <Button variant="secondary" as="a" href="/case-studies" iconRight={<ArrowRight size={16} />}>
+              View all case studies
             </Button>
           </div>
         </div>
