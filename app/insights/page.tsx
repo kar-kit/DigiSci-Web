@@ -6,6 +6,7 @@ import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Eyebrow } from '@/components/ui/Eyebrow';
 import { Tag } from '@/components/ui/Tag';
+import { trackEvent } from '@/lib/gtag';
 
 const FEATURED = {
   slug:     'future-ai-biopharmaceutical-quality-systems',
@@ -236,6 +237,7 @@ export default function InsightsPage() {
               aria-label="Subscribe to Insights"
               className="mt-8 flex gap-3 flex-col sm:flex-row"
               action="#"
+              onSubmit={(e) => { e.preventDefault(); trackEvent('newsletter_subscribe'); }}
             >
               <label htmlFor="subscribe-email" className="sr-only">Work email</label>
               <input
