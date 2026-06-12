@@ -20,7 +20,7 @@ describe('DGS-G1-01 — Page exists', () => {
   });
 
   test('page exports a default React component', () => {
-    assert.ok(src.includes('export default function'), 'No default export function found');
+    assert.ok(src.includes('export default function') || src.includes('export default async function'), 'No default export function found');
   });
 });
 
@@ -48,8 +48,9 @@ describe('DGS-G1-01 — Case studies section', () => {
 
   test('CASE_STUDIES constant declared with 3 entries', () => {
     assert.ok(src.includes('CASE_STUDIES'), 'CASE_STUDIES constant missing');
-    const idx   = src.indexOf('const CASE_STUDIES');
-    const end   = src.indexOf('] as const', idx);
+    const constKey = src.includes('const FALLBACK_CASE_STUDIES') ? 'const FALLBACK_CASE_STUDIES' : 'const CASE_STUDIES';
+    const idx   = src.indexOf(constKey);
+    const end   = src.indexOf('];', idx);
     const block = src.slice(idx, end);
     const count = (block.match(/slug:/g) || []).length;
     assert.equal(count, 3, `Expected 3 slug entries in CASE_STUDIES, found ${count}`);

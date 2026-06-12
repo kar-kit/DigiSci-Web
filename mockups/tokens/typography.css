@@ -1,0 +1,56 @@
+/* ==========================================================================
+   DigiSci — Typography tokens
+   IBM Plex Sans  → display & headings (tight, confident, geometric)
+   Source Serif 4 → body & long-form (authority, readability)
+   IBM Plex Mono  → eyebrows, labels, metrics, code (the "data" voice)
+   Scale is a major-third-ish ramp tuned for executive minimalism:
+   big jumps at the top, generous line-height on body.
+   ========================================================================== */
+
+:root {
+  /* ---- Families ---- */
+  --font-sans:  'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-mono:  'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* Semantic role aliases */
+  --font-display: var(--font-sans);   /* headlines */
+  --font-heading: var(--font-sans);   /* section titles, UI */
+  --font-body:    var(--font-serif);  /* paragraphs, long-form */
+  --font-ui:      var(--font-sans);   /* buttons, nav, inputs */
+  --font-label:   var(--font-mono);   /* eyebrows, tags, metrics */
+
+  /* ---- Type scale (rem) ---- */
+  --text-2xs:  0.6875rem;  /* 11px — micro labels */
+  --text-xs:   0.75rem;    /* 12px — eyebrows, captions */
+  --text-sm:   0.875rem;   /* 14px — UI, meta */
+  --text-base: 1rem;       /* 16px — body min */
+  --text-md:   1.125rem;   /* 18px — lead body */
+  --text-lg:   1.375rem;   /* 22px — small headings */
+  --text-xl:   1.75rem;    /* 28px — H4 */
+  --text-2xl:  2.25rem;    /* 36px — H3 */
+  --text-3xl:  3rem;       /* 48px — H2 */
+  --text-4xl:  4rem;       /* 64px — H1 */
+  --text-5xl:  5.25rem;    /* 84px — hero display */
+  --text-6xl:  7rem;       /* 112px — oversized statement */
+
+  /* ---- Weights ---- */
+  --weight-regular:  400;
+  --weight-medium:   500;
+  --weight-semibold: 600;
+  --weight-bold:     700;
+
+  /* ---- Line heights ---- */
+  --leading-none:    1;
+  --leading-tight:   1.08;   /* display */
+  --leading-snug:    1.2;    /* headings */
+  --leading-normal:  1.45;   /* UI */
+  --leading-relaxed: 1.65;   /* serif body */
+
+  /* ---- Letter spacing ---- */
+  --tracking-tight:  -0.02em;   /* large display */
+  --tracking-snug:   -0.01em;   /* headings */
+  --tracking-normal: 0;
+  --tracking-wide:   0.04em;    /* small caps UI */
+  --tracking-label:  0.14em;    /* mono eyebrows, ALL CAPS */
+}

@@ -1,0 +1,159 @@
+/* ===========================================================================
+   DigiSci design-system component styles (Button · Eyebrow · Tag · Stat ·
+   Card · Field/Input). Extracted from the design-system bundle so these
+   pages render as pure HTML + CSS with no JavaScript.
+   =========================================================================== */
+
+.ds-btn{
+  --_h: 44px; --_px: 22px; --_fs: var(--text-sm);
+  display:inline-flex; align-items:center; justify-content:center; gap:10px;
+  height:var(--_h); padding:0 var(--_px);
+  font-family:var(--font-ui); font-size:var(--_fs); font-weight:var(--weight-semibold);
+  letter-spacing:var(--tracking-wide); line-height:1; white-space:nowrap;
+  border:1px solid transparent; border-radius:var(--radius-xs);
+  cursor:pointer; user-select:none; text-decoration:none;
+  transition:background var(--dur-fast) var(--ease-out),
+             border-color var(--dur-fast) var(--ease-out),
+             color var(--dur-fast) var(--ease-out),
+             transform var(--dur-fast) var(--ease-out);
+}
+.ds-btn:focus-visible{ outline:none; box-shadow:var(--ring); }
+.ds-btn:active{ transform:translateY(1px); }
+.ds-btn[disabled]{ opacity:.4; pointer-events:none; }
+.ds-btn--sm{ --_h:34px; --_px:14px; --_fs:var(--text-xs); }
+.ds-btn--lg{ --_h:52px; --_px:30px; --_fs:var(--text-base); }
+
+/* Primary — precise blue fill, dark ink */
+.ds-btn--primary{ background:var(--accent); color:var(--accent-text); }
+.ds-btn--primary:hover{ background:var(--accent-hover); }
+.ds-btn--primary:active{ background:var(--accent-press); }
+
+/* Secondary — hairline outline, transparent */
+.ds-btn--secondary{ background:transparent; color:var(--text-primary); border-color:var(--border-strong); }
+.ds-btn--secondary:hover{ border-color:var(--accent); color:var(--text-accent); }
+
+/* Ghost — text only */
+.ds-btn--ghost{ background:transparent; color:var(--text-secondary); padding-left:12px; padding-right:12px; }
+.ds-btn--ghost:hover{ color:var(--text-primary); background:var(--border-subtle); }
+
+.ds-btn__icon{ display:inline-flex; width:1.05em; height:1.05em; }
+.ds-btn__icon svg{ width:100%; height:100%; display:block; }
+
+
+.ds-eyebrow{
+  display:inline-flex; align-items:center; gap:12px;
+  font-family:var(--font-label); font-size:var(--text-xs); font-weight:var(--weight-medium);
+  letter-spacing:var(--tracking-label); text-transform:uppercase; color:var(--text-accent);
+}
+.ds-eyebrow__index{ color:var(--text-tertiary); }
+.ds-eyebrow__rule{ width:28px; height:1px; background:var(--accent); flex:none; }
+.ds-eyebrow--muted{ color:var(--text-secondary); }
+.ds-eyebrow--muted .ds-eyebrow__rule{ background:var(--border-strong); }
+
+
+.ds-tag{
+  display:inline-flex; align-items:center; gap:7px;
+  height:24px; padding:0 9px;
+  font-family:var(--font-label); font-size:var(--text-2xs); font-weight:var(--weight-medium);
+  letter-spacing:var(--tracking-label); text-transform:uppercase; line-height:1;
+  border:1px solid var(--border-default); border-radius:var(--radius-xs);
+  color:var(--text-secondary); background:transparent; white-space:nowrap;
+}
+.ds-tag__dot{ width:6px; height:6px; border-radius:var(--radius-pill); background:currentColor; flex:none; }
+/* Sector / domain tag — the only routine use of green */
+.ds-tag--sector{ color:var(--green-400); border-color:rgba(62,149,118,.35); background:var(--sector-muted); }
+.ds-tag--accent{ color:var(--blue-300); border-color:rgba(0,163,224,.35); background:var(--accent-muted); }
+.ds-tag--neutral{ color:var(--text-secondary); }
+.ds-tag--solid{ color:var(--accent-text); background:var(--accent); border-color:var(--accent); }
+
+
+.ds-stat{ display:flex; flex-direction:column; gap:10px; }
+.ds-stat__value{
+  font-family:var(--font-display); font-weight:var(--weight-semibold);
+  font-size:var(--text-4xl); line-height:.95; letter-spacing:var(--tracking-tight);
+  color:var(--text-primary); font-variant-numeric:tabular-nums; display:flex; align-items:baseline; gap:4px;
+}
+.ds-stat__value sup, .ds-stat__unit{
+  font-size:.42em; font-weight:var(--weight-medium); color:var(--text-accent);
+  letter-spacing:0; align-self:flex-start; margin-top:.15em;
+}
+.ds-stat--sm .ds-stat__value{ font-size:var(--text-3xl); }
+.ds-stat--lg .ds-stat__value{ font-size:var(--text-5xl); }
+.ds-stat__label{
+  font-family:var(--font-label); font-size:var(--text-2xs); font-weight:var(--weight-medium);
+  letter-spacing:var(--tracking-label); text-transform:uppercase; color:var(--text-secondary);
+}
+.ds-stat__sub{ font-family:var(--font-ui); font-size:var(--text-sm); color:var(--text-tertiary); }
+
+
+.ds-card{
+  position:relative; display:flex; flex-direction:column;
+  background:var(--surface-raised); border:1px solid var(--border-subtle);
+  border-radius:var(--radius-sm); padding:var(--space-6);
+  transition:border-color var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);
+}
+.ds-card--pad-sm{ padding:var(--space-5); }
+.ds-card--pad-lg{ padding:var(--space-8); }
+/* Accent top rule — engineered, blueprint feel */
+.ds-card--ruled::before{
+  content:""; position:absolute; left:0; top:0; height:2px; width:64px;
+  background:var(--accent);
+}
+.ds-card--interactive{ cursor:pointer; }
+.ds-card--interactive:hover{ border-color:var(--border-strong); transform:translateY(-2px); }
+.ds-card--interactive:hover.ds-card--ruled::before{ width:100%; transition:width var(--dur-slow) var(--ease-out); }
+/* Subtle engineering grid texture */
+.ds-card--grid{
+  background-image:var(--grid-bg); background-size:var(--grid-bg-size);
+  background-color:var(--surface-raised);
+}
+.ds-card__eyebrow{
+  font-family:var(--font-label); font-size:var(--text-2xs); font-weight:var(--weight-medium);
+  letter-spacing:var(--tracking-label); text-transform:uppercase; color:var(--text-accent);
+  margin-bottom:var(--space-4);
+}
+
+
+.ds-field{ display:flex; flex-direction:column; gap:8px; }
+.ds-field__label{
+  font-family:var(--font-label); font-size:var(--text-2xs); font-weight:var(--weight-medium);
+  letter-spacing:var(--tracking-label); text-transform:uppercase; color:var(--text-secondary);
+}
+.ds-input{
+  width:100%; height:46px; padding:0 14px;
+  font-family:var(--font-ui); font-size:var(--text-sm); color:var(--text-primary);
+  background:var(--surface-overlay); border:1px solid var(--border-default);
+  border-radius:var(--radius-xs); line-height:1;
+  transition:border-color var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out);
+}
+.ds-input::placeholder{ color:var(--text-tertiary); }
+.ds-input:hover{ border-color:var(--border-strong); }
+.ds-input:focus{ outline:none; border-color:var(--accent); background:var(--surface-base); box-shadow:0 0 0 3px var(--accent-muted); }
+.ds-input[disabled]{ opacity:.45; pointer-events:none; }
+.ds-input--invalid{ border-color:var(--red-500); }
+.ds-field__hint{ font-family:var(--font-ui); font-size:var(--text-xs); color:var(--text-tertiary); }
+.ds-field__hint--error{ color:var(--red-500); }
+
+.ds-tabs{ display:flex; gap:0; border-bottom:1px solid var(--border-subtle); }
+.ds-tab{
+  appearance:none; background:none; border:none; cursor:pointer;
+  position:relative; padding:14px 18px 16px;
+  font-family:var(--font-ui); font-size:var(--text-sm); font-weight:var(--weight-medium);
+  letter-spacing:var(--tracking-wide); color:var(--text-secondary);
+  transition:color var(--dur-fast) var(--ease-out);
+}
+.ds-tab:hover{ color:var(--text-primary); }
+.ds-tab:focus-visible{ outline:none; box-shadow:var(--ring); border-radius:var(--radius-xs); }
+.ds-tab--active{ color:var(--text-primary); }
+.ds-tab__ink{
+  position:absolute; left:0; right:0; bottom:-1px; height:2px;
+  background:var(--accent); transform:scaleX(0); transform-origin:left;
+  transition:transform var(--dur-base) var(--ease-out);
+}
+.ds-tab--active .ds-tab__ink{ transform:scaleX(1); }
+.ds-tab__count{
+  margin-left:8px; font-family:var(--font-mono); font-size:var(--text-2xs);
+  color:var(--text-tertiary);
+}
+
+.lucide{ stroke-width:1.75; }

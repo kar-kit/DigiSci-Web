@@ -4,7 +4,6 @@ import Script from 'next/script';
 import "./globals.css";
 import { Nav } from "@/components/layout/Nav";
 import { Footer } from "@/components/layout/Footer";
-import { GA_ID } from '@/lib/gtag';
 
 const fontSans = IBM_Plex_Sans({
   subsets: ['latin'],
@@ -70,28 +69,13 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(ORGANIZATION_SCHEMA) }}
         />
-        {GA_ID && (
-          <>
-            <Script id="ga-consent" strategy="beforeInteractive">{`
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('consent', 'default', {
-                analytics_storage: 'denied',
-                ad_storage: 'denied',
-                wait_for_update: 500,
-              });
-            `}</Script>
-            <Script
-              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-              strategy="afterInteractive"
-            />
-            <Script id="ga-config" strategy="afterInteractive">{`
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', '${GA_ID}', { send_page_view: true });
-            `}</Script>
-          </>
+        {process.env.NEXT_PUBLIC_UMAMI_SCRIPT_URL && (
+          <Script
+            src={process.env.NEXT_PUBLIC_UMAMI_SCRIPT_URL}
+            data-website-id={process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID}
+            strategy="afterInteractive"
+            defer
+          />
         )}
       </body>
     </html>

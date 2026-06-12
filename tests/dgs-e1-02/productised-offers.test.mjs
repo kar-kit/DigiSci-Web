@@ -42,8 +42,9 @@ describe('DGS-E1-02 — Section structure', () => {
 describe('DGS-E1-02 — OFFERS data (3 entries)', () => {
   test('OFFERS constant declared with 3 entries', () => {
     assert.ok(src.includes('OFFERS'), 'OFFERS constant missing');
-    const idx   = src.indexOf('const OFFERS');
-    const end   = src.indexOf('] as const', idx);
+    const constKey = src.includes('const FALLBACK_OFFERS') ? 'const FALLBACK_OFFERS' : 'const OFFERS';
+    const idx   = src.indexOf(constKey);
+    const end   = src.indexOf('];', idx);
     const block = src.slice(idx, end);
     const count = (block.match(/title:/g) || []).length;
     assert.equal(count, 3, `Expected 3 title entries in OFFERS, found ${count}`);

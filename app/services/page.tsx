@@ -2,6 +2,9 @@ import type { Metadata } from 'next';
 import { ArrowRight, Check } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Eyebrow } from '@/components/ui/Eyebrow';
+import { sanityFetch } from '@/lib/sanity/client';
+import { servicesPageQuery } from '@/lib/sanity/queries';
+import type { ServicesPage } from '@/lib/sanity/types';
 
 export const metadata: Metadata = {
   title: 'Services | AI Strategy & Digital Ops | DigiSci',
@@ -14,83 +17,34 @@ export const metadata: Metadata = {
   },
 };
 
-const SERVICES = [
-  {
-    n: '01',
-    title: 'AI Transformation Strategy',
-    duration: '6–12 weeks',
-    who: 'For executives seeking to define where AI creates real value in a regulated environment.',
-    deliverables: [
-      'AI opportunity assessment',
-      'Transformation roadmap',
-      'Executive alignment framework',
-      'Regulatory considerations from the outset',
-    ],
-  },
-  {
-    n: '02',
-    title: 'AI Implementation Programmes',
-    duration: '3–9 months',
-    who: 'For operations and quality teams ready to move from strategy to implementation.',
-    deliverables: [
-      'AI-enabled QMS design',
-      'Manufacturing analytics platforms',
-      'Validation & regulatory documentation',
-      'Change management',
-    ],
-  },
-  {
-    n: '03',
-    title: 'Digital Operations Transformation',
-    duration: 'Project-based',
-    who: 'For manufacturing leaders modernising data infrastructure beyond paper and legacy systems.',
-    deliverables: [
-      'Manufacturing data architecture',
-      'Operational KPI framework',
-      'Digital MBR / EBR systems',
-      'Data governance for regulated environments',
-    ],
-  },
-  {
-    n: '04',
-    title: 'Operational Excellence',
-    duration: 'Advisory / programme',
-    who: 'For operations leaders focused on manufacturing performance and quality improvement.',
-    deliverables: [
-      'COGS reduction programmes',
-      'Process optimisation',
-      'Quality system modernisation',
-      'Digital operations strategy',
-    ],
-  },
-] as const;
+const FALLBACK_SERVICES = [
+  { n: '01', title: 'AI Transformation Strategy',       duration: '6–12 weeks',       who: 'For executives seeking to define where AI creates real value in a regulated environment.',           deliverables: ['AI opportunity assessment', 'Transformation roadmap', 'Executive alignment framework', 'Regulatory considerations from the outset'] },
+  { n: '02', title: 'AI Implementation Programmes',     duration: '3–9 months',        who: 'For operations and quality teams ready to move from strategy to implementation.',                     deliverables: ['AI-enabled QMS design', 'Manufacturing analytics platforms', 'Validation & regulatory documentation', 'Change management'] },
+  { n: '03', title: 'Digital Operations Transformation', duration: 'Project-based',    who: 'For manufacturing leaders modernising data infrastructure beyond paper and legacy systems.',          deliverables: ['Manufacturing data architecture', 'Operational KPI framework', 'Digital MBR / EBR systems', 'Data governance for regulated environments'] },
+  { n: '04', title: 'Operational Excellence',           duration: 'Advisory / programme', who: 'For operations leaders focused on manufacturing performance and quality improvement.',            deliverables: ['COGS reduction programmes', 'Process optimisation', 'Quality system modernisation', 'Digital operations strategy'] },
+];
 
-const OFFERS = [
-  {
-    title: 'AI Readiness Assessment',
-    scope: 'Fixed scope · 2–3 weeks',
-    description: 'A scoped diagnostic of where your organisation stands and where AI can credibly create value.',
-  },
-  {
-    title: 'Digital PQS Blueprint',
-    scope: 'Fixed scope · defined outputs',
-    description: 'An architecture for a modern, inspection-ready pharmaceutical quality system.',
-  },
-  {
-    title: 'Manufacturing Data Architecture Design',
-    scope: 'Fixed scope · time-bounded',
-    description: 'A unified operational data layer designed as the foundation for analytics and AI.',
-  },
-] as const;
+const FALLBACK_OFFERS = [
+  { title: 'AI Readiness Assessment',              scope: 'Fixed scope · 2–3 weeks',       description: 'A scoped diagnostic of where your organisation stands and where AI can credibly create value.' },
+  { title: 'Digital PQS Blueprint',               scope: 'Fixed scope · defined outputs',  description: 'An architecture for a modern, inspection-ready pharmaceutical quality system.' },
+  { title: 'Manufacturing Data Architecture Design', scope: 'Fixed scope · time-bounded',  description: 'A unified operational data layer designed as the foundation for analytics and AI.' },
+];
 
-const PROCESS_STEPS = [
+const FALLBACK_PROCESS_STEPS = [
   { n: '01', label: 'Scoping' },
   { n: '02', label: 'Brief' },
   { n: '03', label: 'Deliver' },
   { n: '04', label: 'Handoff' },
-] as const;
+];
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  const cms = await sanityFetch<ServicesPage>(servicesPageQuery);
+
+  const SERVICES      = cms?.services      ?? FALLBACK_SERVICES;
+  const OFFERS        = cms?.offers        ?? FALLBACK_OFFERS;
+  const PROCESS_STEPS = cms?.processSteps  ?? FALLBACK_PROCESS_STEPS;
+  const hero          = cms?.hero;
+
   return (
     <main>
 
@@ -100,17 +54,14 @@ export default function ServicesPage() {
         style={{ backgroundImage: 'var(--grid-bg)', backgroundSize: 'var(--grid-bg-size)' }}
         className="relative border-b border-[var(--border-subtle)] overflow-hidden"
       >
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute top-[-200px] right-[-140px] w-[560px] h-[560px] bg-[radial-gradient(circle,var(--blue-glow),transparent_62%)]"
-        />
+        <div aria-hidden="true" className="pointer-events-none absolute top-[-200px] right-[-140px] w-[560px] h-[560px] bg-[radial-gradient(circle,var(--blue-glow),transparent_62%)]" />
         <div className="relative max-w-[1240px] mx-auto px-6 md:px-10 pt-20 pb-16">
           <Eyebrow rule>Services</Eyebrow>
           <h1 className="font-sans font-semibold text-[clamp(2.25rem,3.5vw,4rem)] leading-[1.08] tracking-[-0.02em] mt-5 mb-5 max-w-[22ch]">
-            Consulting Services for AI-Enabled Biotech Operations
+            {hero?.heading ?? 'Consulting Services for AI-Enabled Biotech Operations'}
           </h1>
           <p className="font-serif text-[1.125rem] leading-[1.65] text-[var(--text-secondary)] max-w-[52em]">
-            A focused portfolio of consulting services for biotech and pharmaceutical organisations navigating AI and digital transformation in regulated environments. Four focused lines — specialism over a menu of twelve.
+            {hero?.body ?? "A focused portfolio of consulting services for biotech and pharmaceutical organisations navigating AI and digital transformation in regulated environments. Four focused lines — specialism over a menu of twelve."}
           </p>
         </div>
       </section>
@@ -132,43 +83,27 @@ export default function ServicesPage() {
                 aria-label={title}
                 className="grid grid-cols-1 gap-8 py-10 border-t border-[var(--border-subtle)] md:grid-cols-[320px_1fr] md:gap-16"
               >
-                {/* Meta column */}
                 <div className="flex flex-col gap-3">
                   <span className="font-mono text-sm text-[var(--text-accent)]">{n}</span>
-                  <h3 className="font-sans font-semibold text-[1.5rem] leading-[1.2] text-[var(--text-primary)]">
-                    {title}
-                  </h3>
-                  <span className="font-mono text-[0.6875rem] tracking-[0.14em] uppercase text-[var(--text-tertiary)]">
-                    {duration}
-                  </span>
-                  <p className="font-serif text-sm leading-[1.6] text-[var(--text-secondary)] italic">
-                    {who}
-                  </p>
+                  <h3 className="font-sans font-semibold text-[1.5rem] leading-[1.2] text-[var(--text-primary)]">{title}</h3>
+                  <span className="font-mono text-[0.6875rem] tracking-[0.14em] uppercase text-[var(--text-tertiary)]">{duration}</span>
+                  <p className="font-serif text-sm leading-[1.6] text-[var(--text-secondary)] italic">{who}</p>
                 </div>
 
-                {/* Deliverables column */}
                 <div className="flex flex-col gap-6">
                   <div>
-                    <span className="font-mono text-[0.6875rem] tracking-[0.14em] uppercase text-[var(--text-tertiary)] block mb-4">
-                      Deliverables
-                    </span>
+                    <span className="font-mono text-[0.6875rem] tracking-[0.14em] uppercase text-[var(--text-tertiary)] block mb-4">Deliverables</span>
                     <ul className="list-none p-0 m-0 flex flex-col gap-3">
                       {deliverables.map((item) => (
                         <li key={item} className="flex items-start gap-3">
-                          <Check
-                            size={14}
-                            aria-hidden="true"
-                            className="text-[var(--accent)] shrink-0 mt-[3px]"
-                          />
+                          <Check size={14} aria-hidden="true" className="text-[var(--accent)] shrink-0 mt-[3px]" />
                           <span className="font-sans text-sm text-[var(--text-secondary)]">{item}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
                   <div>
-                    <Button variant="secondary" size="sm" as="a" href="/contact">
-                      Enquire
-                    </Button>
+                    <Button variant="secondary" size="sm" as="a" href="/contact">Enquire</Button>
                   </div>
                 </div>
               </li>
@@ -182,9 +117,7 @@ export default function ServicesPage() {
         <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-24">
           <div className="mb-12">
             <Eyebrow rule index="02">Structured entry points</Eyebrow>
-            <h2 className="font-sans font-semibold text-[3rem] leading-[1.1] tracking-[-0.02em] mt-4 max-w-[28ch]">
-              For organisations at an earlier stage.
-            </h2>
+            <h2 className="font-sans font-semibold text-[3rem] leading-[1.1] tracking-[-0.02em] mt-4 max-w-[28ch]">For organisations at an earlier stage.</h2>
             <p className="font-serif text-[1.125rem] leading-[1.65] text-[var(--text-secondary)] mt-4 max-w-[52em]">
               Scoped, time-bounded offers with defined outputs — lower activation energy for buyers who can&apos;t get open-ended engagements through procurement.
             </p>
@@ -192,23 +125,12 @@ export default function ServicesPage() {
 
           <div className="grid grid-cols-1 gap-5 md:grid-cols-3" aria-label="Productised offers">
             {OFFERS.map(({ title, scope, description }) => (
-              <article
-                key={title}
-                className="flex flex-col gap-4 border border-[var(--border-default)] p-8 bg-[var(--surface-base)]"
-              >
-                <span className="font-mono text-[0.6875rem] tracking-[0.14em] uppercase text-[var(--accent)]">
-                  {scope}
-                </span>
-                <h3 className="font-sans font-semibold text-[1.25rem] leading-[1.3] text-[var(--text-primary)]">
-                  {title}
-                </h3>
-                <p className="font-serif text-sm leading-[1.65] text-[var(--text-secondary)] grow">
-                  {description}
-                </p>
+              <article key={title} className="flex flex-col gap-4 border border-[var(--border-default)] p-8 bg-[var(--surface-base)]">
+                <span className="font-mono text-[0.6875rem] tracking-[0.14em] uppercase text-[var(--accent)]">{scope}</span>
+                <h3 className="font-sans font-semibold text-[1.25rem] leading-[1.3] text-[var(--text-primary)]">{title}</h3>
+                <p className="font-serif text-sm leading-[1.65] text-[var(--text-secondary)] grow">{description}</p>
                 <div>
-                  <Button variant="secondary" size="sm" as="a" href="/contact">
-                    Enquire
-                  </Button>
+                  <Button variant="secondary" size="sm" as="a" href="/contact">Enquire</Button>
                 </div>
               </article>
             ))}
@@ -221,9 +143,7 @@ export default function ServicesPage() {
         <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-24">
           <div className="mb-12">
             <Eyebrow rule index="03">Engagement process</Eyebrow>
-            <h2 className="font-sans font-semibold text-[3rem] leading-[1.1] tracking-[-0.02em] mt-4 max-w-[20ch]">
-              No black box.
-            </h2>
+            <h2 className="font-sans font-semibold text-[3rem] leading-[1.1] tracking-[-0.02em] mt-4 max-w-[20ch]">No black box.</h2>
             <p className="font-serif text-[1.125rem] leading-[1.65] text-[var(--text-secondary)] mt-4 max-w-[52em]">
               Regulated-industry clients need to understand governance, documentation and handoff before approving a programme.
             </p>
@@ -231,16 +151,9 @@ export default function ServicesPage() {
 
           <ol className="list-none p-0 m-0 grid grid-cols-1 gap-0 sm:grid-cols-4">
             {PROCESS_STEPS.map(({ n, label }) => (
-              <li
-                key={n}
-                className="flex flex-col gap-3 py-8 border-t border-[var(--border-subtle)] sm:border-t-0 sm:border-l sm:pl-6 first:border-l-0 first:pl-0"
-              >
-                <span className="font-mono text-[0.6875rem] tracking-[0.14em] uppercase text-[var(--text-tertiary)]">
-                  Step {n}
-                </span>
-                <span className="font-sans font-semibold text-[1.25rem] text-[var(--text-primary)]">
-                  {label}
-                </span>
+              <li key={n} className="flex flex-col gap-3 py-8 border-t border-[var(--border-subtle)] sm:border-t-0 sm:border-l sm:pl-6 first:border-l-0 first:pl-0">
+                <span className="font-mono text-[0.6875rem] tracking-[0.14em] uppercase text-[var(--text-tertiary)]">Step {n}</span>
+                <span className="font-sans font-semibold text-[1.25rem] text-[var(--text-primary)]">{label}</span>
               </li>
             ))}
           </ol>
@@ -248,27 +161,18 @@ export default function ServicesPage() {
       </section>
 
       {/* CTA Band */}
-      <section
-        aria-label="Call to action"
-        className="bg-[var(--surface-sunken)] border-t border-[var(--border-subtle)]"
-      >
+      <section aria-label="Call to action" className="bg-[var(--surface-sunken)] border-t border-[var(--border-subtle)]">
         <div className="max-w-[1240px] mx-auto px-6 md:px-10 py-24 flex flex-col gap-12 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <Eyebrow rule>Start a project</Eyebrow>
-            <h2 className="font-sans font-semibold text-[3rem] leading-[1.1] tracking-[-0.02em] mt-4 max-w-[22ch]">
-              Know which line fits? Brief us directly.
-            </h2>
+            <h2 className="font-sans font-semibold text-[3rem] leading-[1.1] tracking-[-0.02em] mt-4 max-w-[22ch]">Know which line fits? Brief us directly.</h2>
             <p className="font-serif text-[1.125rem] leading-[1.65] text-[var(--text-secondary)] mt-4 max-w-[40ch]">
               Our enquiry form is pre-populated with a service-line selector, so your enquiry arrives qualified.
             </p>
           </div>
           <div className="flex gap-3 shrink-0">
-            <Button variant="primary" size="lg" as="a" href="/contact" iconRight={<ArrowRight size={17} />}>
-              Start an enquiry
-            </Button>
-            <Button variant="secondary" size="lg" as="a" href="/case-studies">
-              View case studies
-            </Button>
+            <Button variant="primary" size="lg" as="a" href="/contact" iconRight={<ArrowRight size={17} />}>Start an enquiry</Button>
+            <Button variant="secondary" size="lg" as="a" href="/case-studies">View case studies</Button>
           </div>
         </div>
       </section>

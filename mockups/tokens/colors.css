@@ -1,0 +1,118 @@
+/* ==========================================================================
+   DigiSci — Color tokens
+   Dark navy is the default mood. The palette is disciplined: one navy spine,
+   one precise-blue accent, a neutral ramp for light surfaces, and a single
+   muted green reserved for sector / domain tags. No warm tones. No generic
+   tech-blue gradients. High contrast, sharp edges.
+   ========================================================================== */
+
+:root {
+  /* ---- Navy spine (brand #0A1628 lives at 900) ------------------------- */
+  --navy-950: #06101C;
+  --navy-900: #0A1628;   /* DigiSci navy — primary brand color */
+  --navy-850: #0D1B30;
+  --navy-800: #112139;
+  --navy-700: #182943;
+  --navy-600: #233653;
+  --navy-500: #324867;
+  --navy-400: #4A6285;
+
+  /* ---- Precise blue accent (brand #00A3E0 at 500) ---------------------- */
+  --blue-700: #006A93;
+  --blue-600: #0086B8;
+  --blue-500: #00A3E0;   /* DigiSci accent — precise blue */
+  --blue-400: #33B7E7;
+  --blue-300: #6FCBEF;
+  --blue-200: #ADE0F6;
+  --blue-glow: rgba(0, 163, 224, 0.16);
+
+  /* ---- Neutral ramp (off-white #F9FAFB at 50) -------------------------- */
+  --neutral-0:   #FFFFFF;
+  --neutral-50:  #F9FAFB;   /* DigiSci off-white — primary light surface */
+  --neutral-100: #F1F3F6;
+  --neutral-200: #E2E7ED;
+  --neutral-300: #C9D1DA;
+  --neutral-400: #9BA6B4;
+  --neutral-500: #6C7888;
+  --neutral-600: #4C5868;
+  --neutral-700: #33404F;
+
+  /* ---- Sector green (muted, used sparingly for domain tags) ------------ */
+  --green-600: #2F7A5E;
+  --green-500: #3E9576;   /* sector / domain tag */
+  --green-400: #5FAE90;
+  --green-glow: rgba(62, 149, 118, 0.14);
+
+  /* ---- Signal (rare; status only, never decorative) -------------------- */
+  --amber-500: #D99A2B;
+  --red-500:   #D9534F;
+
+  /* ======================================================================
+     Semantic aliases — DARK is the default theme.
+     Reference these in components, not the raw scale above.
+     ====================================================================== */
+
+  /* Surfaces */
+  --surface-base:    var(--navy-900);   /* page background */
+  --surface-sunken:  var(--navy-950);   /* wells, code blocks */
+  --surface-raised:  var(--navy-850);   /* cards */
+  --surface-overlay: var(--navy-800);   /* dialogs, popovers, inputs */
+  --surface-inverse: var(--neutral-50); /* light blocks inside dark page */
+
+  /* Text */
+  --text-primary:   var(--neutral-50);
+  --text-secondary: var(--neutral-400);
+  --text-tertiary:  var(--neutral-500);
+  --text-inverse:   var(--navy-900);
+  --text-accent:    var(--blue-400);
+
+  /* Borders / hairlines */
+  --border-subtle:  rgba(255, 255, 255, 0.07);
+  --border-default: rgba(255, 255, 255, 0.12);
+  --border-strong:  rgba(255, 255, 255, 0.22);
+  --border-accent:  var(--blue-500);
+
+  /* Accent (interactive) */
+  --accent:        var(--blue-500);
+  --accent-hover:  var(--blue-400);
+  --accent-press:  var(--blue-600);
+  --accent-text:   var(--navy-950);   /* text on a blue fill */
+  --accent-muted:  var(--blue-glow);
+
+  /* Sector */
+  --sector:        var(--green-500);
+  --sector-muted:  var(--green-glow);
+
+  /* Grid / data-viz overlay lines */
+  --grid-line:     rgba(255, 255, 255, 0.05);
+  --grid-line-2:   rgba(0, 163, 224, 0.10);
+
+  /* Focus ring */
+  --focus-ring:    var(--blue-500);
+}
+
+/* ==========================================================================
+   Light scope — opt in by adding [data-theme="light"] to a container.
+   Off-white surfaces, navy ink. Used for light marketing sections and docs.
+   ========================================================================== */
+[data-theme="light"] {
+  --surface-base:    var(--neutral-50);
+  --surface-sunken:  var(--neutral-100);
+  --surface-raised:  var(--neutral-0);
+  --surface-overlay: var(--neutral-0);
+  --surface-inverse: var(--navy-900);
+
+  --text-primary:   var(--navy-900);
+  --text-secondary: var(--neutral-600);
+  --text-tertiary:  var(--neutral-500);
+  --text-inverse:   var(--neutral-50);
+  --text-accent:    var(--blue-600);
+
+  --border-subtle:  rgba(10, 22, 40, 0.08);
+  --border-default: rgba(10, 22, 40, 0.14);
+  --border-strong:  rgba(10, 22, 40, 0.26);
+
+  --accent-text:    var(--neutral-50);
+  --grid-line:      rgba(10, 22, 40, 0.05);
+  --grid-line-2:    rgba(0, 163, 224, 0.12);
+}

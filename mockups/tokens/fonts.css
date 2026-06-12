@@ -1,0 +1,11 @@
+/* ==========================================================================
+   DigiSci — Webfonts
+   Headings: IBM Plex Sans (geometric-leaning grotesque, IBM/data heritage)
+   Body:     Source Serif 4 (intellectual authority, precise serif)
+   Data/UI:  IBM Plex Mono (labels, metrics, code, sector eyebrows)
+   Loaded from Google Fonts. See readme.md → Typography for substitution note
+   (Neue Haas Grotesk, requested in the brief, is a licensed face — IBM Plex
+   Sans is the open substitute and is intentionally close in voice.)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&display=swap');
