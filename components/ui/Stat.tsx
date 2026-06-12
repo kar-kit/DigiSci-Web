@@ -7,20 +7,23 @@ interface StatProps {
   size?: 'sm' | 'md';
 }
 
+// DS spec: value at --text-4xl (4rem/64px) for md, --text-3xl (3rem/48px) for sm
+// Unit is .42em of the value font-size, in --text-accent color
+// Label is mono, --text-2xs (11px), uppercase, --tracking-label
 export function Stat({ value, unit, label, size = 'md' }: StatProps) {
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex items-baseline gap-1 leading-none">
+    <div className="flex flex-col gap-[10px]">
+      <div className="flex items-baseline gap-1 leading-[0.95]">
         <span className={[
           'font-sans font-semibold tracking-[-0.02em] text-[--color-text-primary] tabular-nums',
-          size === 'sm' ? 'text-4xl' : 'text-[4rem]',
+          size === 'sm' ? 'text-[3rem]' : 'text-[4rem]',
         ].join(' ')}>
           {value}
         </span>
         {unit && (
           <span className={[
-            'font-mono font-medium tracking-[0.14em] uppercase text-[--color-accent]',
-            size === 'sm' ? 'text-xl' : 'text-[1.75rem]',
+            'font-mono font-medium text-[--color-text-accent] self-start mt-[0.15em]',
+            size === 'sm' ? 'text-[1.26rem]' : 'text-[1.68rem]',
           ].join(' ')}>
             {unit}
           </span>

@@ -5,11 +5,13 @@ import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
+import { ArrowRight } from 'lucide-react';
 
 const NAV_LINKS = [
-  { label: 'Approach', href: '/approach' },
-  { label: 'Sectors',  href: '/sectors' },
-  { label: 'About',    href: '/about' },
+  { label: 'Approach',     href: '/approach' },
+  { label: 'Sectors',      href: '/sectors' },
+  { label: 'Intelligence', href: '/intelligence' },
+  { label: 'About',        href: '/about' },
 ];
 
 export function Nav() {
@@ -81,7 +83,10 @@ export function Nav() {
                 </Link>
               );
             })}
-            <Button variant="primary" size="sm" as="a" href="/contact">
+            <Button variant="ghost" size="sm" as="a" href="/client-login">
+              Client login
+            </Button>
+            <Button variant="primary" size="sm" as="a" href="/contact" iconRight={<ArrowRight size={15} />}>
               Request a briefing
             </Button>
           </nav>
