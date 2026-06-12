@@ -1,8 +1,11 @@
 /**
  * DGS-C2-02: Industry sectors section
- * Sectors are on the /industry page (not homepage) per design_mockup/index.html.
- * AC: Section showing 3 sectors: Cell & Gene Therapy, Pharmaceutical Manufacturing,
- * AI in Regulated Environments. Each with brief description.
+ * Sectors are on the /industry page per mockups/industry.html.
+ * AC: Three detailed sector sections: Cell & Gene Therapy, Pharmaceutical Manufacturing,
+ *     AI in Regulated Environments. Each with sector tags, body copy, and capabilities.
+ *
+ * NOTE: Updated from stub (basic grid) to full mockup spec (three individual sections).
+ * The mockup spec uses three separate detail sections, not a single SECTORS.map grid.
  */
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
@@ -14,64 +17,101 @@ const __dir = dirname(fileURLToPath(import.meta.url));
 const ROOT  = join(__dir, '..', '..');
 const src   = readFileSync(join(ROOT, 'app/industry/page.tsx'), 'utf8');
 
-describe('DGS-C2-02 — Sectors section structure', () => {
-  test('section has aria-label="Industry sectors"', () => {
-    assert.ok(src.includes('aria-label="Industry sectors"'), 'Industry sectors section aria-label missing');
+describe('DGS-C2-02 — Page structure', () => {
+  test('industry page exports a default component', () => {
+    assert.ok(src.includes('export default function'), 'No default export function found');
   });
 
-  test('"Who we work with" eyebrow present', () => {
-    assert.ok(src.includes('Who we work with'), '"Who we work with" eyebrow missing');
+  test('page hero section present', () => {
+    assert.ok(src.includes('aria-label="Page hero"'), 'Page hero aria-label missing');
   });
 
-  test('section heading present', () => {
-    assert.ok(src.includes('Deep expertise') || src.includes('demand it most'), 'sectors section heading missing');
-  });
-
-  test('responsive grid: 1-col mobile, 3-col desktop (sm:grid-cols-3)', () => {
-    assert.ok(src.includes('sm:grid-cols-3'), 'sm:grid-cols-3 missing on sectors grid');
+  test('page heading about deep expertise present', () => {
+    assert.ok(
+      src.includes('Deep Expertise') || src.includes('Deep expertise') || src.includes('demand it most'),
+      'Deep expertise heading missing'
+    );
   });
 });
 
 describe('DGS-C2-02 — All three sectors present', () => {
-  test('Cell & Gene Therapy sector present', () => {
-    assert.ok(src.includes('Cell & Gene Therapy') || src.includes('Cell &amp; Gene Therapy'), 'Cell & Gene Therapy sector missing');
+  test('Cell & Gene Therapy sector section present', () => {
+    assert.ok(
+      src.includes('Cell and Gene Therapy expertise') || src.includes('Cell & Gene Therapy') || src.includes('Cell &amp; Gene Therapy'),
+      'Cell & Gene Therapy sector missing'
+    );
   });
 
-  test('Pharmaceutical Manufacturing sector present', () => {
-    assert.ok(src.includes('Pharmaceutical Manufacturing') || src.includes('Pharmaceutical'), 'Pharmaceutical Manufacturing sector missing');
+  test('Pharmaceutical Manufacturing sector section present', () => {
+    assert.ok(
+      src.includes('Pharmaceutical Manufacturing'),
+      'Pharmaceutical Manufacturing sector missing'
+    );
   });
 
-  test('AI in Regulated Environments sector present', () => {
-    assert.ok(src.includes('AI in Regulated Environments') || src.includes('Regulated Environments'), 'AI in Regulated Environments sector missing');
-  });
-});
-
-describe('DGS-C2-02 — Sector cards content', () => {
-  test('sector card template has h3 title', () => {
-    const sectorsBlock = src.slice(src.indexOf('SECTORS.map'));
-    assert.ok(sectorsBlock.includes('<h3'), 'h3 title missing from sectors map template');
-  });
-
-  test('sector card template has description paragraph (font-serif)', () => {
-    const sectorsBlock = src.slice(src.indexOf('SECTORS.map'));
-    assert.ok(sectorsBlock.includes('font-serif'), 'font-serif description missing from sectors template');
-  });
-
-  test('sector cards use Tag with variant="sector"', () => {
-    const sectorsBlock = src.slice(src.indexOf('SECTORS.map'));
-    assert.ok(sectorsBlock.includes('variant="sector"'), 'sector variant Tag missing from sectors template');
+  test('AI in Regulated Environments sector section present', () => {
+    assert.ok(
+      src.includes('AI in Regulated Environments'),
+      'AI in Regulated Environments sector missing'
+    );
   });
 });
 
-describe('DGS-C2-02 — Learn more links present', () => {
-  test('learn more links present', () => {
-    assert.ok(src.includes('Learn more'), '"Learn more" link text missing');
+describe('DGS-C2-02 — Sector tags', () => {
+  test('CGT sector tags present (ATMP, chain of identity, GMP)', () => {
+    assert.ok(src.includes('ATMP'), 'ATMP tag missing');
+    assert.ok(src.includes('Chain of identity') || src.includes('chain of identity'), 'Chain of identity tag missing');
+    assert.ok(src.includes('GMP cell therapy') || src.includes('GMP'), 'GMP cell therapy tag missing');
   });
 
-  test('links have aria-label for accessibility', () => {
-    const sectorsIdx = src.indexOf('Industry sectors');
-    const sectorsSection = src.slice(sectorsIdx);
-    assert.ok(sectorsSection.includes('aria-label'), 'sector links missing aria-label');
+  test('pharma sector tags present (small-molecule, quality systems)', () => {
+    assert.ok(
+      src.includes('Small-molecule') || src.includes('small-molecule'),
+      'Small-molecule tag missing'
+    );
+    assert.ok(src.includes('Quality systems') || src.includes('quality systems'), 'Quality systems tag missing');
+  });
+
+  test('AI sector regulatory tags present', () => {
+    assert.ok(src.includes('GxP'), 'GxP tag missing');
+    assert.ok(src.includes('ALCOA+') || src.includes('ALCOA'), 'ALCOA+ tag missing');
+  });
+
+  test('Tag component with sector variant used', () => {
+    assert.ok(src.includes('variant="sector"'), 'sector variant Tag missing');
+  });
+});
+
+describe('DGS-C2-02 — Sector body copy', () => {
+  test('CGT body copy mentions patient-specific or autologous/allogeneic', () => {
+    assert.ok(
+      src.includes('patient-specific') || src.includes('autologous') || src.includes('allogeneic'),
+      'CGT patient-specific manufacturing context missing'
+    );
+  });
+
+  test('Pharma body copy mentions quality/compliance alignment', () => {
+    assert.ok(
+      src.includes('compliance') || src.includes('quality') && src.includes('aligned'),
+      'Pharma quality/compliance context missing'
+    );
+  });
+
+  test('AI section mentions regulatory compliance / defensible', () => {
+    assert.ok(
+      src.includes('defensible') || src.includes('regulatory compliance') || src.includes('regulatory expectations'),
+      'AI regulatory defensibility context missing'
+    );
+  });
+});
+
+describe('DGS-C2-02 — Capabilities and CTAs', () => {
+  test('Check icon used for capability items', () => {
+    assert.ok(src.includes('Check'), 'Check icon missing from capabilities list');
+  });
+
+  test('link to /case-studies present from sector sections', () => {
+    assert.ok(src.includes('href="/case-studies"'), 'Link to /case-studies missing');
   });
 });
 
