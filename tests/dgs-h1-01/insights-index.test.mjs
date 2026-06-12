@@ -73,27 +73,27 @@ describe('DGS-H1-01 — Article card markup', () => {
   });
 
   test('article cards are links to /insights/[slug]', () => {
-    const block = src.slice(src.indexOf('ARTICLES.map'));
+    const block = src.slice(src.indexOf('filteredArticles.map') !== -1 ? src.indexOf('filteredArticles.map') : src.indexOf('ARTICLES.map'));
     assert.ok(block.includes('/insights/'), 'Links to article detail pages missing');
   });
 
   test('Tag component used in article card', () => {
-    const block = src.slice(src.indexOf('ARTICLES.map'));
+    const block = src.slice(src.indexOf('filteredArticles.map') !== -1 ? src.indexOf('filteredArticles.map') : src.indexOf('ARTICLES.map'));
     assert.ok(block.includes('<Tag'), 'Tag component missing from article cards');
   });
 
   test('date and readTime rendered in card', () => {
-    const block = src.slice(src.indexOf('ARTICLES.map'));
+    const block = src.slice(src.indexOf('filteredArticles.map') !== -1 ? src.indexOf('filteredArticles.map') : src.indexOf('ARTICLES.map'));
     assert.ok(block.includes('date') && block.includes('readTime'), 'date and readTime not rendered in card');
   });
 
   test('excerpt rendered in card', () => {
-    const block = src.slice(src.indexOf('ARTICLES.map'));
+    const block = src.slice(src.indexOf('filteredArticles.map') !== -1 ? src.indexOf('filteredArticles.map') : src.indexOf('ARTICLES.map'));
     assert.ok(block.includes('excerpt'), 'excerpt not rendered in card');
   });
 
   test('h3 heading in article card', () => {
-    const block = src.slice(src.indexOf('ARTICLES.map'));
+    const block = src.slice(src.indexOf('filteredArticles.map') !== -1 ? src.indexOf('filteredArticles.map') : src.indexOf('ARTICLES.map'));
     assert.ok(block.includes('<h3'), 'h3 heading missing from article cards');
   });
 });
