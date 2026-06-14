@@ -44,3 +44,16 @@ export const caseStudyBySlugQuery = `
 `;
 
 export const allCaseStudySlugsQuery = `*[_type == "caseStudy"].slug.current`;
+
+export const articlesSitemapQuery = `
+  *[_type == "article"] | order(date desc) {
+    "slug": slug.current,
+    "lastmod": date
+  }
+`;
+
+export const caseStudiesSitemapQuery = `
+  *[_type == "caseStudy"] | order(_createdAt asc) {
+    "slug": slug.current
+  }
+`;

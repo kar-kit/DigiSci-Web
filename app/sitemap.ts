@@ -1,4 +1,6 @@
 import type { MetadataRoute } from 'next';
+import { sanityFetch } from '@/lib/sanity/client';
+import { articlesSitemapQuery, caseStudiesSitemapQuery } from '@/lib/sanity/queries';
 
 const BASE = 'https://digisci.solutions';
 
@@ -31,7 +33,14 @@ const ARTICLE_SLUGS = [
   'ai-enabled-batch-disposition-promise-guardrails',
 ] as const;
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export const revalidate = 3600;
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const [cmsArticles, cmsCaseStudies] = await Promise.all([
+    sanityFetch<{ slug: string; lastmod: string }[]>(articlesSitemapQuery),
+    sanityFetch<{ slug: string }[]>(caseStudiesSitemapQuery),
+  ]);
+
   const staticEntries: MetadataRoute.Sitemap = STATIC_ROUTES.map(
     ({ path, changeFrequency, priority }) => ({
       url: `${BASE}${path}`,
@@ -40,16 +49,27 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })
   );
 
-  const caseStudyEntries: MetadataRoute.Sitemap = CASE_STUDY_SLUGS.map((slug) => ({
+  const caseStudySlugs: string[] = cmsCaseStudies
+    ? [...new Set([...cmsCaseStudies.map((c) => c.slug), ...CASE_STUDY_SLUGS])]
+    : [...CASE_STUDY_SLUGS];
+
+  const caseStudyEntries: MetadataRoute.Sitemap = caseStudySlugs.map((slug) => ({
     url: `${BASE}/case-studies/${slug}`,
     changeFrequency: 'monthly',
     priority: 0.7,
   }));
 
-  const articleEntries: MetadataRoute.Sitemap = ARTICLE_SLUGS.map((slug) => ({
+  const articleSlugs: string[] = cmsArticles
+    ? [...new Set([...cmsArticles.map((a) => a.slug), ...ARTICLE_SLUGS])]
+    : [...ARTICLE_SLUGS];
+
+  const cmsDateMap = new Map(cmsArticles?.map((a) => [a.slug, a.lastmod]) ?? []);
+
+  const articleEntries: MetadataRoute.Sitemap = articleSlugs.map((slug) => ({
     url: `${BASE}/insights/${slug}`,
-    changeFrequency: 'monthly',
+    changeFrequency: 'monthly' as const,
     priority: 0.7,
+    ...(cmsDateMap.has(slug) ? { lastModified: cmsDateMap.get(slug) } : {}),
   }));
 
   return [...staticEntries, ...caseStudyEntries, ...articleEntries];
