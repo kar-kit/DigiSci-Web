@@ -103,9 +103,23 @@ export default function ContactPage() {
               <h2 className="font-sans font-semibold text-[1.75rem] leading-[1.2] tracking-[-0.02em] mt-4 mb-4">
                 Book a Discovery Call
               </h2>
-              <p className="font-serif text-[1.0625rem] leading-[1.7] text-[var(--text-secondary)] mb-8">
-                A 30-minute discovery call is the most efficient starting point. We use it to understand your situation, the nature of the challenge, and whether our expertise is the right fit. There is no obligation.
+              <p className="font-serif text-[1.0625rem] leading-[1.7] text-[var(--text-secondary)] mb-4">
+                A 30-minute discovery call is the most efficient starting point. No obligation, no sales pitch — just an honest conversation.
               </p>
+              <ul aria-label="Discovery call structure" className="mb-8 flex flex-col gap-2 pl-0 list-none">
+                <li className="flex items-start gap-3 font-serif text-[0.9375rem] leading-[1.65] text-[var(--text-secondary)]">
+                  <span className="mt-[0.45em] w-1.5 h-1.5 rounded-full bg-[var(--accent)] shrink-0" aria-hidden="true" />
+                  You share the operational challenge and context
+                </li>
+                <li className="flex items-start gap-3 font-serif text-[0.9375rem] leading-[1.65] text-[var(--text-secondary)]">
+                  <span className="mt-[0.45em] w-1.5 h-1.5 rounded-full bg-[var(--accent)] shrink-0" aria-hidden="true" />
+                  We assess whether our expertise is the right fit
+                </li>
+                <li className="flex items-start gap-3 font-serif text-[0.9375rem] leading-[1.65] text-[var(--text-secondary)]">
+                  <span className="mt-[0.45em] w-1.5 h-1.5 rounded-full bg-[var(--accent)] shrink-0" aria-hidden="true" />
+                  If there is a fit, we agree on next steps together
+                </li>
+              </ul>
 
               {/* Calendar widget */}
               <div
@@ -195,6 +209,9 @@ export default function ContactPage() {
               <h2 className="font-sans font-semibold text-[1.75rem] leading-[1.2] tracking-[-0.02em] mt-4 mb-4">
                 Send an Enquiry
               </h2>
+              <p className="font-serif text-[1.0625rem] leading-[1.7] text-[var(--text-secondary)] mb-8">
+                Tell us about your situation and what you&apos;re trying to solve. We review every enquiry personally and typically respond within one business day.
+              </p>
 
               {formSubmitted ? (
                 <div
