@@ -12,9 +12,12 @@ import { fileURLToPath } from 'node:url';
 const __dir = dirname(fileURLToPath(import.meta.url));
 const ROOT  = join(__dir, '..', '..');
 const src   = readFileSync(join(ROOT, 'app/insights/page.tsx'), 'utf8');
-// Interactive content was extracted into a client component
+// Interactive content was extracted into a client component; subscribe form extracted to NewsletterForm (DGS-H1-02)
 const clientSrc = (() => {
   try { return readFileSync(join(ROOT, 'app/insights/InsightsClient.tsx'), 'utf8'); } catch { return src; }
+})();
+const newsletterSrc = (() => {
+  try { return readFileSync(join(ROOT, 'components/ui/NewsletterForm.tsx'), 'utf8'); } catch { return ''; }
 })();
 
 describe('DGS-H1-01 — Page exists', () => {
@@ -175,15 +178,22 @@ describe('DGS-H1-01 — Subscribe CTA', () => {
   });
 
   test('email input present', () => {
+    // DGS-H1-02: email input moved to shared NewsletterForm component
     assert.ok(
       src.includes('type="email"') || src.includes("type='email'") ||
-      clientSrc.includes('type="email"') || clientSrc.includes("type='email'"),
+      clientSrc.includes('type="email"') || clientSrc.includes("type='email'") ||
+      newsletterSrc.includes('type="email"') || newsletterSrc.includes("type='email'"),
       'Email input missing'
     );
   });
 
   test('"Subscribe for Insights" button present', () => {
-    assert.ok(src.includes('Subscribe for Insights') || clientSrc.includes('Subscribe for Insights'), '"Subscribe for Insights" button missing');
+    // DGS-H1-02: button text moved to shared NewsletterForm component
+    assert.ok(
+      src.includes('Subscribe for Insights') || clientSrc.includes('Subscribe for Insights') ||
+      newsletterSrc.includes('Subscribe for Insights'),
+      '"Subscribe for Insights" button missing'
+    );
   });
 });
 

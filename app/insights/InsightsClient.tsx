@@ -3,11 +3,11 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
 import { Eyebrow } from '@/components/ui/Eyebrow';
 import { Tag } from '@/components/ui/Tag';
 import { trackEvent } from '@/lib/umami';
 import type { ArticleListItem } from '@/lib/sanity/types';
+import { NewsletterForm } from '@/components/ui/NewsletterForm';
 
 type FeaturedArticle = Pick<ArticleListItem, 'slug' | 'tag' | 'date' | 'title' | 'excerpt' | 'readTime'>;
 
@@ -135,30 +135,10 @@ export function InsightsClient({
             <p className="font-serif text-[1.125rem] leading-[1.65] text-[var(--text-secondary)] mt-4">
               New insights are published regularly. Strategic and technical perspectives written for biotech and pharmaceutical operations leaders.
             </p>
-            <form
-              aria-label="Subscribe to Insights"
-              className="mt-8 flex gap-3 flex-col sm:flex-row"
-              onSubmit={async (e) => {
-                e.preventDefault();
-                const email = (e.currentTarget.elements.namedItem('email') as HTMLInputElement)?.value;
-                await fetch('/api/subscribe', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ email }),
-                });
-                trackEvent('newsletter_subscribe');
-              }}
-            >
-              <label htmlFor="subscribe-email" className="sr-only">Work email</label>
-              <input
-                id="subscribe-email"
-                name="email"
-                type="email"
-                placeholder="name@company.com"
-                className="flex-1 bg-[var(--surface-base)] border border-[var(--border-default)] px-4 py-3 font-sans text-sm text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] focus:outline-none focus:border-[var(--accent)] transition-colors duration-[120ms]"
+            <NewsletterForm
+                emailId="subscribe-email"
+                onSuccess={() => trackEvent('newsletter_subscribe')}
               />
-              <Button variant="primary" as="button" type="submit">Subscribe for Insights</Button>
-            </form>
           </div>
         </div>
       </section>
