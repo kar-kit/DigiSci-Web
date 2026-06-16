@@ -57,6 +57,7 @@ export default function ContactPage() {
         email: fd.get('email'),
         enquiryType: fd.get('enquiryType'),
         description: fd.get('description'),
+        gdprConsent: fd.get('gdprConsent') === 'on',
       }),
     });
     if (res.ok) {
@@ -296,6 +297,28 @@ export default function ContactPage() {
                       placeholder="The operational challenge you're working through…"
                       className="bg-[var(--surface-base)] border border-[var(--border-default)] px-4 py-3 font-sans text-sm text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] focus:outline-none focus:border-[var(--accent)] transition-colors duration-[120ms] resize-y"
                     />
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <input
+                      id="contact-gdpr"
+                      name="gdprConsent"
+                      type="checkbox"
+                      required
+                      className="mt-0.5 h-4 w-4 shrink-0 border border-[var(--border-default)] bg-[var(--surface-base)] accent-[var(--accent)] cursor-pointer"
+                    />
+                    <label htmlFor="contact-gdpr" className="font-serif text-sm leading-[1.6] text-[var(--text-secondary)] cursor-pointer">
+                      I agree that DigiSci may store and use the information I provide to respond to my enquiry, in accordance with its{' '}
+                      <a
+                        href="/privacy"
+                        className="text-[var(--accent)] hover:underline"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Privacy Policy
+                      </a>
+                      .
+                    </label>
                   </div>
 
                   {formError && (

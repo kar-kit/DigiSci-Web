@@ -10,9 +10,14 @@ export async function POST(req: Request) {
     email?: string;
     enquiryType?: string;
     description?: string;
+    gdprConsent?: boolean;
   };
 
-  const { name, organisation, role, email, enquiryType, description } = body;
+  const { name, organisation, role, email, enquiryType, description, gdprConsent } = body;
+
+  if (!gdprConsent) {
+    return NextResponse.json({ error: 'GDPR consent is required' }, { status: 400 });
+  }
 
   if (!name || !email || !description) {
     return NextResponse.json({ error: 'name, email and description are required' }, { status: 400 });
