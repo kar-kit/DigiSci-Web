@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowRight } from 'lucide-react';
 import { PortableText } from '@portabletext/react';
-import { Button } from '@/components/ui/Button';
 import { Eyebrow } from '@/components/ui/Eyebrow';
+import { NewsletterForm } from '@/components/ui/NewsletterForm';
 import { Tag } from '@/components/ui/Tag';
 import { sanityFetch } from '@/lib/sanity/client';
 import { articleBySlugQuery, allArticleSlugsQuery, allArticlesQuery } from '@/lib/sanity/queries';
@@ -326,16 +326,7 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
             <p className="font-serif text-[1.125rem] leading-[1.65] text-[var(--text-secondary)] mt-4">
               New insights are published regularly. Strategic and technical perspectives written for biotech and pharmaceutical operations leaders.
             </p>
-            <form aria-label="Subscribe to Insights" className="mt-8 flex gap-3 flex-col sm:flex-row" action="#">
-              <label htmlFor="article-subscribe-email" className="sr-only">Work email</label>
-              <input
-                id="article-subscribe-email"
-                type="email"
-                placeholder="name@company.com"
-                className="flex-1 bg-[var(--surface-base)] border border-[var(--border-default)] px-4 py-3 font-sans text-sm text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] focus:outline-none focus:border-[var(--accent)] transition-colors duration-[120ms]"
-              />
-              <Button variant="primary" as="button" type="submit">Subscribe for Insights</Button>
-            </form>
+            <NewsletterForm emailId="article-subscribe-email" />
           </div>
         </div>
       </section>

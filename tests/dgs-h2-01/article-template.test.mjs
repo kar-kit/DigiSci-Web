@@ -13,6 +13,10 @@ import { fileURLToPath } from 'node:url';
 const __dir = dirname(fileURLToPath(import.meta.url));
 const ROOT  = join(__dir, '..', '..');
 const src   = readFileSync(join(ROOT, 'app/insights/[slug]/page.tsx'), 'utf8');
+// DGS-H1-02: subscribe form extracted to shared NewsletterForm component
+const newsletterSrc = (() => {
+  try { return readFileSync(join(ROOT, 'components/ui/NewsletterForm.tsx'), 'utf8'); } catch { return ''; }
+})();
 
 describe('DGS-H2-01 — File exists', () => {
   test('app/insights/[slug]/page.tsx exists and is non-empty', () => {
@@ -149,11 +153,20 @@ describe('DGS-H2-01 — Subscribe section', () => {
   });
 
   test('email input in subscribe section', () => {
-    assert.ok(src.includes('type="email"') || src.includes("type='email'"), 'Email input missing from subscribe section');
+    // DGS-H1-02: email input moved to shared NewsletterForm component
+    assert.ok(
+      src.includes('type="email"') || src.includes("type='email'") ||
+      newsletterSrc.includes('type="email"') || newsletterSrc.includes("type='email'"),
+      'Email input missing from subscribe section'
+    );
   });
 
   test('"Subscribe for Insights" button present', () => {
-    assert.ok(src.includes('Subscribe for Insights'), '"Subscribe for Insights" button text missing');
+    // DGS-H1-02: button text moved to shared NewsletterForm component
+    assert.ok(
+      src.includes('Subscribe for Insights') || newsletterSrc.includes('Subscribe for Insights'),
+      '"Subscribe for Insights" button text missing'
+    );
   });
 
   test('"Stay current" heading present', () => {
