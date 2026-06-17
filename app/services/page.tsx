@@ -171,7 +171,7 @@ export default async function ServicesPage() {
             </p>
           </div>
           <div className="flex gap-3 shrink-0">
-            <Button variant="primary" size="lg" as="a" href="/contact" iconRight={<ArrowRight size={17} />}>Start an enquiry</Button>
+            <Button variant="primary" size="lg" as="a" href="/contact" iconRight={<ArrowRight size={17} />}>Enquire About a Project</Button>
             <Button variant="secondary" size="lg" as="a" href="/case-studies">View case studies</Button>
           </div>
         </div>
