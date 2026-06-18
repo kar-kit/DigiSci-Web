@@ -21,7 +21,12 @@ describe('DGS-I2-03 — sitemap.ts structure', () => {
   });
 
   test('exports default function', () => {
-    assert.ok(sitemap.includes('export default function sitemap'), 'sitemap default export missing');
+    // sitemap is async (required for Sanity CMS fetches); match either form
+    assert.ok(
+      sitemap.includes('export default async function sitemap') ||
+      sitemap.includes('export default function sitemap'),
+      'sitemap default export missing'
+    );
   });
 
   test('base URL is digisci.solutions', () => {
